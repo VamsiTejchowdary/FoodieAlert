@@ -1,0 +1,9 @@
+{
+  "/page": "/",
+  "/favicon.ico/route": "/favicon.ico",
+  "/register/page": "/register",
+  "/dashboard/page": "/dashboard",
+  "/api/userExists/route": "/api/userExists",
+  "/api/register/route": "/api/register",
+  "/api/auth/[...nextauth]/route": "/api/auth/[...nextauth]"
+}
