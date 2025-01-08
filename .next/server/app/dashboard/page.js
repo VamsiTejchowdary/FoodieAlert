@@ -266,7 +266,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7365);
 /* harmony import */ var react_toastify_dist_ReactToastify_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(45996);
 /* harmony import */ var react_toastify_dist_ReactToastify_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_toastify_dist_ReactToastify_css__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var react_icons_fa__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(40858);
+/* harmony import */ var react_icons_fa__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(40858);
+/* harmony import */ var next_navigation__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(57114);
+/* harmony import */ var next_navigation__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(next_navigation__WEBPACK_IMPORTED_MODULE_5__);
 /* __next_internal_client_entry_do_not_use__ default auto */ 
 
 
@@ -274,9 +276,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // Verified Icon
+
 function UserInfo() {
     const { data: session, status } = (0,next_auth_react__WEBPACK_IMPORTED_MODULE_2__.useSession)();
     const [locations, setLocations] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
+    const router = (0,next_navigation__WEBPACK_IMPORTED_MODULE_5__.useRouter)();
     const [user, setUser] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null); // Store user details
     const [isModalOpen, setIsModalOpen] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false); // For modal visibility
     const [businessName, setBusinessName] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""); // Input field for Business Name
@@ -366,6 +370,13 @@ function UserInfo() {
             children: "Loading..."
         }); // Show loading until session is ready
     }
+    const handleSignOut = ()=>{
+        (0,next_auth_react__WEBPACK_IMPORTED_MODULE_2__.signOut)({
+            redirect: false
+        }).then(()=>{
+            router.push("/");
+        });
+    };
     return /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
         className: "grid place-items-center h-screen bg-gray-100 p-4",
         children: [
@@ -383,7 +394,7 @@ function UserInfo() {
                                     session?.user?.name
                                 ]
                             }),
-                            user?.status === "approved" && /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(react_icons_fa__WEBPACK_IMPORTED_MODULE_5__/* .FaCheckCircle */ .FJM, {
+                            user?.status === "approved" && /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(react_icons_fa__WEBPACK_IMPORTED_MODULE_6__/* .FaCheckCircle */ .FJM, {
                                 className: "text-green-500 text-2xl"
                             })
                         ]
@@ -447,7 +458,7 @@ function UserInfo() {
                         children: "Add Location"
                     }),
                     /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("button", {
-                        onClick: ()=>(0,next_auth_react__WEBPACK_IMPORTED_MODULE_2__.signOut)(),
+                        onClick: handleSignOut,
                         className: "w-full bg-red-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out transform hover:scale-105",
                         children: "Log Out"
                     })
@@ -461,7 +472,7 @@ function UserInfo() {
                         /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("button", {
                             onClick: ()=>setIsModalOpen(false),
                             className: "absolute top-4 right-4 text-gray-600 hover:text-black",
-                            children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(react_icons_fa__WEBPACK_IMPORTED_MODULE_5__/* .FaTimesCircle */ .G5m, {
+                            children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(react_icons_fa__WEBPACK_IMPORTED_MODULE_6__/* .FaTimesCircle */ .G5m, {
                                 className: "text-xl"
                             })
                         }),
@@ -565,7 +576,7 @@ function Dashboard() {
 var __webpack_require__ = require("../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [697,501,48,386], () => (__webpack_exec__(10046)));
+var __webpack_exports__ = __webpack_require__.X(0, [697,501,961,386], () => (__webpack_exec__(10046)));
 module.exports = __webpack_exports__;
 
 })();

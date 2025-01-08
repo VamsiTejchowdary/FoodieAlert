@@ -5,10 +5,12 @@ import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"; // Verified Icon
+import { useRouter } from "next/navigation";
 
 export default function UserInfo() {
   const { data: session, status } = useSession();
   const [locations, setLocations] = useState([]);
+  const router = useRouter();
   const [user, setUser] = useState(null); // Store user details
   const [isModalOpen, setIsModalOpen] = useState(false); // For modal visibility
   const [businessName, setBusinessName] = useState(""); // Input field for Business Name
@@ -108,6 +110,14 @@ export default function UserInfo() {
     return <div>Loading...</div>; // Show loading until session is ready
   }
 
+  const handleSignOut = () => {
+    signOut({
+      redirect: false,
+    }).then(() => {
+      router.push("/");
+    });
+  };
+
   return (
     <div className="grid place-items-center h-screen bg-gray-100 p-4">
       {/* Toaster container */}
@@ -178,7 +188,7 @@ export default function UserInfo() {
 
         {/* Logout Button */}
         <button
-          onClick={() => signOut()}
+          onClick={handleSignOut}
           className="w-full bg-red-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out transform hover:scale-105"
         >
           Log Out

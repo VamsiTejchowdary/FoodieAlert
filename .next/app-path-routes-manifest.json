@@ -5,10 +5,10 @@
   "/dashboard/page": "/dashboard",
   "/customerform/page": "/customerform",
   "/register/page": "/register",
-  "/api/locations/route": "/api/locations",
-  "/api/userExists/route": "/api/userExists",
   "/api/customersubscribe/route": "/api/customersubscribe",
-  "/api/register/route": "/api/register",
+  "/api/locations/route": "/api/locations",
   "/api/registernewlocation/route": "/api/registernewlocation",
+  "/api/register/route": "/api/register",
+  "/api/userExists/route": "/api/userExists",
   "/api/auth/[...nextauth]/route": "/api/auth/[...nextauth]"
 }

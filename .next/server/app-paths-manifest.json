@@ -5,10 +5,10 @@
   "/dashboard/page": "app/dashboard/page.js",
   "/customerform/page": "app/customerform/page.js",
   "/register/page": "app/register/page.js",
-  "/api/locations/route": "app/api/locations/route.js",
-  "/api/userExists/route": "app/api/userExists/route.js",
   "/api/customersubscribe/route": "app/api/customersubscribe/route.js",
-  "/api/register/route": "app/api/register/route.js",
+  "/api/locations/route": "app/api/locations/route.js",
   "/api/registernewlocation/route": "app/api/registernewlocation/route.js",
+  "/api/register/route": "app/api/register/route.js",
+  "/api/userExists/route": "app/api/userExists/route.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js"
 }

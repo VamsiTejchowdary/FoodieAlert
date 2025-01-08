@@ -261,11 +261,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var next_auth_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(74284);
 /* harmony import */ var next_auth_react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_auth_react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var next_navigation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(57114);
+/* harmony import */ var next_navigation__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_navigation__WEBPACK_IMPORTED_MODULE_2__);
 /* __next_internal_client_entry_do_not_use__ default auto */ 
+
 
 
 function AdminDashboard() {
     const { data: session } = (0,next_auth_react__WEBPACK_IMPORTED_MODULE_1__.useSession)();
+    const router = (0,next_navigation__WEBPACK_IMPORTED_MODULE_2__.useRouter)();
+    const handleSignOut = ()=>{
+        (0,next_auth_react__WEBPACK_IMPORTED_MODULE_1__.signOut)({
+            redirect: false
+        }).then(()=>{
+            router.push("/");
+        });
+    };
     return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
         className: "grid place-items-center h-screen",
         children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
@@ -290,9 +301,7 @@ function AdminDashboard() {
                     ]
                 }),
                 /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("button", {
-                    onClick: ()=>(0,next_auth_react__WEBPACK_IMPORTED_MODULE_1__.signOut)({
-                            callbackUrl: "/"
-                        }),
+                    onClick: handleSignOut,
                     className: "bg-red-500 text-white font-bold px-6 py-2 mt-3",
                     children: "Log Out"
                 })
@@ -339,6 +348,14 @@ const __default__ = proxy.default;
 function Dashboard() {
     return /*#__PURE__*/ jsx_runtime_.jsx(admindashboard, {});
 }
+
+
+/***/ }),
+
+/***/ 57114:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__(90696)
 
 
 /***/ })
