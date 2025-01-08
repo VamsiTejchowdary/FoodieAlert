@@ -386,13 +386,13 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 89115:
+/***/ 46126:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 3280, 23));
 Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 69274, 23));
 Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 3349, 23));
 Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 89708, 23));
+Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 3280, 23));
 Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 53368))
 
 /***/ }),
@@ -421,11 +421,13 @@ function RegisterForm() {
     const [name, setName] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)("");
     const [email, setEmail] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)("");
     const [password, setPassword] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)("");
+    const [businessName, setBusinessName] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)("");
+    const [businessAddress, setBusinessAddress] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)("");
     const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)("");
     const router = (0,next_navigation__WEBPACK_IMPORTED_MODULE_3__.useRouter)();
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        if (!name || !email || !password) {
+        if (!name || !email || !password || !businessName || !businessAddress) {
             setError("All fields are necessary.");
             return;
         }
@@ -452,7 +454,9 @@ function RegisterForm() {
                 body: JSON.stringify({
                     name,
                     email,
-                    password
+                    password,
+                    businessName,
+                    businessAddress
                 })
             });
             if (res.ok) {
@@ -488,6 +492,16 @@ function RegisterForm() {
                             onChange: (e)=>setEmail(e.target.value),
                             type: "text",
                             placeholder: "Email"
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("input", {
+                            onChange: (e)=>setBusinessName(e.target.value),
+                            type: "text",
+                            placeholder: "Business Name"
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("input", {
+                            onChange: (e)=>setBusinessAddress(e.target.value),
+                            type: "text",
+                            placeholder: "Business Address"
                         }),
                         /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("input", {
                             onChange: (e)=>setPassword(e.target.value),
@@ -580,7 +594,7 @@ async function Register() {
 var __webpack_require__ = require("../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [697,77,989,752,501,107,150,723], () => (__webpack_exec__(99138)));
+var __webpack_exports__ = __webpack_require__.X(0, [697,77,501,752,440,674,243,723], () => (__webpack_exec__(99138)));
 module.exports = __webpack_exports__;
 
 })();

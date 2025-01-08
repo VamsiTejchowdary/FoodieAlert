@@ -1,9 +1,13 @@
 {
   "/page": "/",
   "/favicon.ico/route": "/favicon.ico",
-  "/register/page": "/register",
+  "/admindashboard/page": "/admindashboard",
   "/dashboard/page": "/dashboard",
+  "/customerform/page": "/customerform",
+  "/register/page": "/register",
+  "/api/locations/route": "/api/locations",
   "/api/userExists/route": "/api/userExists",
   "/api/register/route": "/api/register",
+  "/api/customersubscribe/route": "/api/customersubscribe",
   "/api/auth/[...nextauth]/route": "/api/auth/[...nextauth]"
 }

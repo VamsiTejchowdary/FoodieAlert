@@ -22,11 +22,24 @@ export default function LoginForm() {
         redirect: false,
       });
 
+      const resUserExists = await fetch("api/userExists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await resUserExists.json();
+      const user = data.user; // user is an object
+      
       if (res.error) {
         setError("Invalid Credentials");
         return;
       }
-
+      if(user.role === "admin"){
+        router.replace("admindashboard");
+      }
       router.replace("dashboard");
     } catch (error) {
       console.log(error);

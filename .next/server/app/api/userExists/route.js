@@ -64,8 +64,7 @@ async function POST(req) {
         const { email } = await req.json();
         const user = await models_user/* default */.Z.findOne({
             email
-        }).select("_id");
-        console.log("user: ", user);
+        });
         return next_response/* default */.Z.json({
             user
         });
@@ -142,11 +141,20 @@ const userSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
         required: true
+    },
+    role: {
+        type: String,
+        default: "user"
+    },
+    status: {
+        type: String,
+        default: "pending"
     }
 }, {
     timestamps: true

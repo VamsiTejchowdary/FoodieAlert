@@ -12,13 +12,6 @@ module.exports = require("mongoose");
 
 /***/ }),
 
-/***/ 6113:
-/***/ ((module) => {
-
-module.exports = require("crypto");
-
-/***/ }),
-
 /***/ 22037:
 /***/ ((module) => {
 
@@ -57,34 +50,48 @@ var app_route_module = __webpack_require__(69692);
 var module_default = /*#__PURE__*/__webpack_require__.n(app_route_module);
 // EXTERNAL MODULE: ./lib/mongodb.js
 var mongodb = __webpack_require__(30729);
+// EXTERNAL MODULE: ./models/locations.js
+var locations = __webpack_require__(3322);
+var locations_default = /*#__PURE__*/__webpack_require__.n(locations);
 // EXTERNAL MODULE: ./models/user.js
-var user = __webpack_require__(90796);
+var models_user = __webpack_require__(90796);
 // EXTERNAL MODULE: ./node_modules/next/dist/server/web/exports/next-response.js
 var next_response = __webpack_require__(89335);
-// EXTERNAL MODULE: ./node_modules/bcryptjs/index.js
-var bcryptjs = __webpack_require__(54989);
 ;// CONCATENATED MODULE: ./app/api/register/route.js
 
+ // Import Location model
 
-
-
+ // Import MongoDB connection function
 async function POST(req) {
     try {
-        const { name, email, password } = await req.json();
+        const { name, email, password, businessName, businessAddress } = await req.json();
+        // Connect to MongoDB
         await (0,mongodb/* connectMongoDB */.q)();
-        await user/* default */.Z.create({
+        // Create the user (business owner)
+        const user = await models_user/* default */.Z.create({
             name,
             email,
             password
         });
+        // Access the user_id (which is the _id field)
+        const user_id = user._id;
+        // Create a location associated with the user (business owner)
+        const location = await locations_default().create({
+            business_id: user_id,
+            name: businessName,
+            address: businessAddress
+        });
         return next_response/* default */.Z.json({
-            message: "User registered."
+            message: "User and location registered.",
+            user_id,
+            location_id: location._id
         }, {
             status: 201
         });
     } catch (error) {
+        console.error(error);
         return next_response/* default */.Z.json({
-            message: "An error occurred while registering the user."
+            message: "An error occurred while registering the user or location."
         }, {
             status: 500
         });
@@ -122,27 +129,6 @@ async function POST(req) {
 
 /***/ }),
 
-/***/ 30729:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   q: () => (/* binding */ connectMongoDB)
-/* harmony export */ });
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11185);
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
-
-const connectMongoDB = async ()=>{
-    try {
-        await mongoose__WEBPACK_IMPORTED_MODULE_0___default().connect(process.env.MONGODB_URI);
-        console.log("Connected to MongoDB");
-    } catch (error) {
-        console.log("Error connecting to MongoDB: ", error);
-    }
-};
-
-
-/***/ }),
-
 /***/ 90796:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -159,11 +145,20 @@ const userSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
         required: true
+    },
+    role: {
+        type: String,
+        default: "user"
+    },
+    status: {
+        type: String,
+        default: "pending"
     }
 }, {
     timestamps: true
@@ -181,7 +176,7 @@ const User = mongoose__WEBPACK_IMPORTED_MODULE_0__.models.User || mongoose__WEBP
 var __webpack_require__ = require("../../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [697,77,632,989,335], () => (__webpack_exec__(68981)));
+var __webpack_exports__ = __webpack_require__.X(0, [697,77,632,335,478], () => (__webpack_exec__(68981)));
 module.exports = __webpack_exports__;
 
 })();

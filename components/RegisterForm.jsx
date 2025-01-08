@@ -8,6 +8,8 @@ export default function RegisterForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [businessName, setBusinessName] = useState("");
+  const [businessAddress, setBusinessAddress] = useState("");
   const [error, setError] = useState("");
 
   const router = useRouter();
@@ -15,7 +17,7 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !businessName || !businessAddress) {
       setError("All fields are necessary.");
       return;
     }
@@ -44,6 +46,8 @@ export default function RegisterForm() {
           name,
           email,
           password,
+          businessName,
+          businessAddress,
         }),
       });
 
@@ -74,6 +78,16 @@ export default function RegisterForm() {
             onChange={(e) => setEmail(e.target.value)}
             type="text"
             placeholder="Email"
+          />
+          <input
+            onChange={(e) => setBusinessName(e.target.value)}
+            type="text"
+            placeholder="Business Name"
+          />
+          <input
+            onChange={(e) => setBusinessAddress(e.target.value)}
+            type="text"
+            placeholder="Business Address"
           />
           <input
             onChange={(e) => setPassword(e.target.value)}
