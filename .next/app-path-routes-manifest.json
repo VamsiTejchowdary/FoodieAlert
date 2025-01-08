@@ -7,7 +7,8 @@
   "/register/page": "/register",
   "/api/locations/route": "/api/locations",
   "/api/userExists/route": "/api/userExists",
-  "/api/register/route": "/api/register",
   "/api/customersubscribe/route": "/api/customersubscribe",
+  "/api/register/route": "/api/register",
+  "/api/registernewlocation/route": "/api/registernewlocation",
   "/api/auth/[...nextauth]/route": "/api/auth/[...nextauth]"
 }

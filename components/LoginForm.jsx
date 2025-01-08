@@ -32,15 +32,18 @@ export default function LoginForm() {
 
       const data = await resUserExists.json();
       const user = data.user; // user is an object
-      
+
       if (res.error) {
         setError("Invalid Credentials");
         return;
       }
-      if(user.role === "admin"){
+      console.log("role: ",user.role);
+      if(user.role == "admin"){
+        console.log("Hi role: ",user.role);
         router.replace("admindashboard");
+      }else{
+        router.replace("dashboard");
       }
-      router.replace("dashboard");
     } catch (error) {
       console.log(error);
     }

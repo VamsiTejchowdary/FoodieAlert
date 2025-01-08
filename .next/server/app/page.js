@@ -377,13 +377,13 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 21896:
+/***/ 93810:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
+Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 3280, 23));
 Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 69274, 23));
 Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 3349, 23));
 Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 89708, 23));
-Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 3280, 23));
 Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 48083))
 
 /***/ }),
@@ -439,10 +439,13 @@ function LoginForm() {
                 setError("Invalid Credentials");
                 return;
             }
-            if (user.role === "admin") {
+            console.log("role: ", user.role);
+            if (user.role == "admin") {
+                console.log("Hi role: ", user.role);
                 router.replace("admindashboard");
+            } else {
+                router.replace("dashboard");
             }
-            router.replace("dashboard");
         } catch (error) {
             console.log(error);
         }
@@ -558,7 +561,7 @@ async function Home() {
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [697,77,501,752,440,674,243,723], () => (__webpack_exec__(49596)));
+var __webpack_exports__ = __webpack_require__.X(0, [697,77,501,752,107,386,723], () => (__webpack_exec__(49596)));
 module.exports = __webpack_exports__;
 
 })();
