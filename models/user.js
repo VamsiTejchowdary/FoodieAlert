@@ -9,6 +9,12 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
+      lowercase: true 
+    },
+    number: {
+      type: Number,
+      required: true,
       unique: true, // Ensuring email is unique
     },
     password: {
@@ -26,6 +32,12 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+userSchema.pre("save", function (next) {
+  this.email = this.email.toLowerCase();
+  next();
+});
+
 
 const User = models.User || mongoose.model("User", userSchema);
 export default User;

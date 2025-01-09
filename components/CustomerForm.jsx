@@ -7,6 +7,7 @@ const CustomerForm = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [favFood, setfavFood] = useState("");
 
   // State to store the list of locations fetched from MongoDB
   const [locations, setLocations] = useState([]);
@@ -37,11 +38,15 @@ const CustomerForm = () => {
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
+   
+    const code = Math.floor(1000 + Math.random() * 9000);
 
     const formData = {
       name,
       phone,
       email,
+      favfood: favFood,
+      code,
       location_id: selectedLocation,
     };
 
@@ -60,6 +65,7 @@ const CustomerForm = () => {
         setName(""); // Clear name field
         setPhone(""); // Clear phone field
         setEmail(""); // Clear email field
+        setfavFood(""); // Clear favFood field
         setSelectedLocation(""); // Clear location selection
 
         // Clear the success message after a timeout
@@ -97,7 +103,7 @@ const CustomerForm = () => {
           <div style={styles.formGroup}>
             <label htmlFor="phone" style={styles.label}>Phone Number</label>
             <input
-              type="text"
+              type="number"
               id="phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -112,6 +118,17 @@ const CustomerForm = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
+              style={styles.input}
+            />
+          </div>
+          <div style={styles.formGroup}>
+            <label htmlFor="favfood" style={styles.label}>Favourite Food</label>
+            <input
+              type="text"
+              id="favfood"
+              value={favFood}
+              onChange={(e) => setfavFood(e.target.value)}
               required
               style={styles.input}
             />

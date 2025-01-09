@@ -19,6 +19,8 @@ const locationSchema = new Schema(
       required: true,
       trim: true, // Removes whitespace from address
     },
+    adminstatus: { type: String, default: 'pending' },
+    activestatus: { type: Boolean, default: true }
   },
   { timestamps: true } // Automatically adds createdAt and updatedAt fields
 );

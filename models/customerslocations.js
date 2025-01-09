@@ -12,6 +12,8 @@ const locationCustomerSchema = new mongoose.Schema(
       ref: "Customer", 
       required: true 
     },
+    subscription: { type: Boolean, default: true },
+    code: { type: Number, required: true , default: 0},
   },
   { timestamps: true }
 );

@@ -125,7 +125,9 @@ export default function UserInfo() {
 
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-lg space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-semibold text-gray-800">Hello {session?.user?.name}</h1>
+          <h1 className="text-3xl font-semibold text-gray-800">
+            Hello {session?.user?.name}
+          </h1>
           {user?.status === "approved" && (
             <FaCheckCircle className="text-green-500 text-2xl" />
           )}
@@ -155,7 +157,9 @@ export default function UserInfo() {
 
         {user?.status === "approved" && (
           <div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Locations</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Locations
+            </h2>
             {locations.length > 0 ? (
               <ul className="list-disc pl-6 space-y-2">
                 {locations.map((location, index) => (
@@ -173,18 +177,22 @@ export default function UserInfo() {
           </div>
         )}
 
-        {/* Add Location Button */}
-        <button
-          onClick={() => setIsModalOpen(true)}
-          disabled={user?.status !== "approved"}
-          className={`w-full px-6 py-3 rounded-lg text-white font-semibold ${
-            user?.status === "approved"
-              ? "bg-blue-600 hover:bg-blue-700"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-          } transition duration-300 ease-in-out transform hover:scale-105`}
-        >
-          Add Location
-        </button>
+        {user?.status === "approved" && (
+          <div>
+            {/* Add Location Button */}
+            <button
+              onClick={() => setIsModalOpen(true)}
+              disabled={user?.status !== "approved"}
+              className={`w-full px-6 py-3 rounded-lg text-white font-semibold ${
+                user?.status === "approved"
+                  ? "bg-blue-600 hover:bg-blue-700"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              } transition duration-300 ease-in-out transform hover:scale-105`}
+            >
+              Add Location
+            </button>
+          </div>
+        )}
 
         {/* Logout Button */}
         <button
@@ -207,7 +215,9 @@ export default function UserInfo() {
               <FaTimesCircle className="text-xl" />
             </button>
 
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Add New Location</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+              Add New Location
+            </h2>
 
             <div className="space-y-4">
               <div>

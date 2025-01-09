@@ -32,7 +32,6 @@ export default function LoginForm() {
 
       const data = await resUserExists.json();
       const user = data.user; // user is an object
-
       if (res.error) {
         setError("Invalid Credentials");
         return;

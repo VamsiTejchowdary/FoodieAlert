@@ -1,14 +1,1 @@
-{
-  "/page": "/",
-  "/favicon.ico/route": "/favicon.ico",
-  "/admindashboard/page": "/admindashboard",
-  "/dashboard/page": "/dashboard",
-  "/customerform/page": "/customerform",
-  "/register/page": "/register",
-  "/api/customersubscribe/route": "/api/customersubscribe",
-  "/api/locations/route": "/api/locations",
-  "/api/registernewlocation/route": "/api/registernewlocation",
-  "/api/register/route": "/api/register",
-  "/api/userExists/route": "/api/userExists",
-  "/api/auth/[...nextauth]/route": "/api/auth/[...nextauth]"
-}
+{"/api/customersubscribe/route":"/api/customersubscribe","/_not-found/page":"/_not-found","/api/fetchallusers/route":"/api/fetchallusers","/api/locations/route":"/api/locations","/api/userExists/route":"/api/userExists","/api/register/route":"/api/register","/api/registernewlocation/route":"/api/registernewlocation","/api/findcustomerbyemail/route":"/api/findcustomerbyemail","/favicon.ico/route":"/favicon.ico","/api/fetchlocationsusingcustomerid/route":"/api/fetchlocationsusingcustomerid","/api/auth/[...nextauth]/route":"/api/auth/[...nextauth]","/admindashboard/page":"/admindashboard","/customerform/page":"/customerform","/dashboard/page":"/dashboard","/page":"/","/register/page":"/register","/customerunsubscribe/page":"/customerunsubscribe"}

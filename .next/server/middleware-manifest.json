@@ -1,7 +1,5 @@
 {
-  "sortedMiddleware": [
-    "/"
-  ],
+  "version": 3,
   "middleware": {
     "/": {
       "files": [
@@ -12,14 +10,23 @@
       "page": "/",
       "matchers": [
         {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/dashboard(.json)?[\\/#\\?]?$",
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/dashboard(\\.json)?[\\/#\\?]?$",
           "originalSource": "/dashboard"
         }
       ],
       "wasm": [],
-      "assets": []
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "6erjapEOHhJEWV3B1MBRY",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "u4CDRuSiOEV5HNeAxaxwoLHXqPmedbDkxZ9bnhdksng=",
+        "__NEXT_PREVIEW_MODE_ID": "b8832578e0fc4809d558c88614feb235",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "73b6b05f8fa8227212ec695ed8345a853f889ca8910d5a0e27c06ae88175b765",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "fa789fc27ef90c70bd0e872cc96c3d2aa0f30d507744679af1a97b2c0491b114"
+      }
     }
   },
   "functions": {},
-  "version": 2
+  "sortedMiddleware": [
+    "/"
+  ]
 }

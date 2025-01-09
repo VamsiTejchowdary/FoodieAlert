@@ -4,7 +4,7 @@ import { connectMongoDB } from "@/lib/mongodb"; // Import MongoDB connection fun
 
 export async function POST(req) {
   try {
-    const { name, phone, email, location_id } = await req.json();
+    const { name, phone, email, favfood, code, location_id } = await req.json();
 
     // Connect to the database
     await connectMongoDB();
@@ -14,14 +14,17 @@ export async function POST(req) {
     console.log("phone: ", phone);
     console.log("email: ", email);
     console.log("location_id: ", location_id);
+    console.log("customercode and  code type: ", code + typeof(code));
 
     // Create a new customer
-    const customer = await Customer.create({ name, phone, email });
+    const customer = await Customer.create({ name, phone, email, favfood });
 
+    
     // Link the customer to the location
     const locationCustomer = await CustomerLocation.create({
       location_id: location_id,
       customer_id: customer._id,
+      code: code,
     });
 
     // Return a success response
@@ -34,6 +37,7 @@ export async function POST(req) {
       { status: 201, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
+
     console.error(error);
 
     // Return an error response
