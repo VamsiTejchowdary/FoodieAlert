@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -33,12 +36,12 @@ export default function LoginForm() {
       const data = await resUserExists.json();
       const user = data.user; // user is an object
       if (res.error) {
+        toast.error("Invalid Credentials");
         setError("Invalid Credentials");
         return;
       }
-      console.log("role: ",user.role);
+      toast.success("Logged in successfully");
       if(user.role == "admin"){
-        console.log("Hi role: ",user.role);
         router.replace("admindashboard");
       }else{
         router.replace("dashboard");
@@ -52,7 +55,7 @@ export default function LoginForm() {
     <div className="grid place-items-center h-screen">
       <div className="shadow-lg p-5 rounded-lg border-t-4 border-green-400">
         <h1 className="text-xl font-bold my-4">Login</h1>
-
+        <ToastContainer />
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
             onChange={(e) => setEmail(e.target.value)}

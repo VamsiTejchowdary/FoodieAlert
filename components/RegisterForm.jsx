@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function RegisterForm() {
   const [name, setName] = useState("");
@@ -34,7 +36,7 @@ export default function RegisterForm() {
       const { user } = await resUserExists.json();
 
       if (user) {
-        setError("User already exists.");
+        toast.error("User already exists.");
         return;
       }
 
@@ -56,9 +58,11 @@ export default function RegisterForm() {
       if (res.ok) {
         const form = e.target;
         form.reset();
-        router.push("/");
+        toast.success("User registration Successfull!", {
+          onClose: () => router.push("/"), // Navigate after toast disappears
+        });
       } else {
-        console.log("User registration failed.");
+        toast.error("User registration failed!");
       }
     } catch (error) {
       console.log("Error during registration: ", error);
@@ -69,7 +73,7 @@ export default function RegisterForm() {
     <div className="grid place-items-center h-screen">
       <div className="shadow-lg p-5 rounded-lg border-t-4 border-green-400">
         <h1 className="text-xl font-bold my-4">Register</h1>
-
+        <ToastContainer />
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
             onChange={(e) => setName(e.target.value)}

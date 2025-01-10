@@ -12,14 +12,13 @@ const CustomerForm = () => {
   // State to store the list of locations fetched from MongoDB
   const [locations, setLocations] = useState([]);
 
-  // State to display a success message
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Fetch locations data from the backend
+  
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await fetch("api/locations", {
+        const response = await fetch(`api/locations?email=${encodeURIComponent(email)}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -32,15 +31,17 @@ const CustomerForm = () => {
         console.error("Error fetching locations:", error);
       }
     };
-    fetchLocations();
-  }, []);
+    if (email) {
+      fetchLocations();
+    }
+  }, [email]);
 
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-   
+     
     const code = Math.floor(1000 + Math.random() * 9000);
-
+  
     const formData = {
       name,
       phone,
@@ -49,7 +50,9 @@ const CustomerForm = () => {
       code,
       location_id: selectedLocation,
     };
-
+  
+    console.log("Form Data:", formData); // Debug: check what is being sent
+    
     try {
       const response = await fetch("/api/customersubscribe", {
         method: "POST",
@@ -58,7 +61,7 @@ const CustomerForm = () => {
         },
         body: JSON.stringify(formData),
       });
-
+  
       const result = await response.json();
       if (response.ok) {
         setSuccessMessage("Thank you for subscribing!");
@@ -67,7 +70,7 @@ const CustomerForm = () => {
         setEmail(""); // Clear email field
         setfavFood(""); // Clear favFood field
         setSelectedLocation(""); // Clear location selection
-
+  
         // Clear the success message after a timeout
         setTimeout(() => {
           setSuccessMessage("");

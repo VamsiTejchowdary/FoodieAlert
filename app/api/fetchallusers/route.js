@@ -7,7 +7,9 @@ export async function GET(req) {
   try {
     await connectMongoDB();
     // Fetch all users from the database
-    const users = await User.find();
+    const users = await User.find(
+       { role: "user",}
+    );
 
     // If no users found, return an empty array
     if (!users || users.length === 0) {

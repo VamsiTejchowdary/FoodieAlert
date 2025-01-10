@@ -1,55 +1,75 @@
-import Location from '@/models/locations';  // Import Location model
-import { connectMongoDB } from "@/lib/mongodb"; // Import MongoDB connection function
+import { connectMongoDB } from "@/lib/mongodb";
+import Customer from "@/models/customers";
+import CustomerLocation from "@/models/customerslocations";
+import Location from "@/models/locations";
 
 export async function GET(request) {
   try {
-    // Connect to the database
     await connectMongoDB();
 
-    // Parse the query parameters from the request URL
     const url = new URL(request.url);
-    const business_id = url.searchParams.get("business_id");
+    const email = url.searchParams.get("email"); // Get the email of the customer
 
-    // Fetch based on whether business_id is provided or not
-    let locations;
-    if (business_id) {
-      // Fetch locations by business_id
-      locations = await Location.find({ business_id });
-      if (!locations.length) {
-        return new Response(
-          JSON.stringify({ message: `No locations found for business_id: ${business_id}` }),
-          {
-            status: 404,
-            headers: {
-              "Content-Type": "application/json",
+    let locations = []; // Initialize locations as an empty array
+
+    if (email) {
+      // Fetch the customer by email
+      const customer = await Customer.findOne({ email });
+      console.log("Fetched customer:", customer);
+
+      if (customer) {
+        // Fetch all `CustomerLocation` records for the customer
+        const customerLocations = await CustomerLocation.find({
+          customer_id: customer._id,
+        });
+
+        // Get all location IDs where subscription is true
+        const excludedLocationIds = customerLocations
+          .filter((cl) => cl.subscription === true)
+          .map((cl) => cl.location_id.toString());
+
+        // Fetch locations where:
+        // 1. There is no record in `CustomerLocation` (not registered).
+        // 2. There is a record but `subscription` is `false`.
+        const availableLocations = await Location.find({
+          $and: [
+            {
+              $or: [
+                { _id: { $nin: customerLocations.map((cl) => cl.location_id) } }, // Not registered
+                { _id: { $in: customerLocations.filter((cl) => !cl.subscription).map((cl) => cl.location_id) } }, // Registered but unsubscribed
+              ],
             },
-          }
-        );
+            { adminstatus: "approved" }, // Only approved locations
+          ],
+        });
+
+        // Add these locations to the response
+        locations = availableLocations.map((location) => ({
+          ...location._doc,
+        }));
+      } else {
+        console.log("No customer found for the given email.");
       }
-    } else {
-      // Fetch all locations
-      locations = await Location.find();
     }
 
-    // Send locations as a response
+    console.log("Filtered locations:", locations);
+
     return new Response(
-      JSON.stringify({ locations }),
+      JSON.stringify({ locations }), // Return only filtered locations
       {
         status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       }
     );
   } catch (error) {
-    console.error(error);
+    console.error("Error while fetching locations:", error);
     return new Response(
-      JSON.stringify({ message: "An error occurred while fetching locations." }),
+      JSON.stringify({
+        message: "An error occurred while fetching locations.",
+      }),
       {
         status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       }
     );
   }

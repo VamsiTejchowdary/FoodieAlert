@@ -8,17 +8,116 @@ export default function CustomerUnsubscribeForm() {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
+  const [locations, setLocations] = useState([]); // Store locations
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [customer, setCustomer] = useState(null);
+
+  const fetchCustomerAndLocations = async (email) => {
+    try {
+      const response = await fetch("api/findcustomerbyemail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      const customer = data.customer;
+      setCustomer(customer);
+
+      if (customer?._id) {
+        fetchLocationsUsingCustomerId(customer._id);
+      } else {
+        setLocations([]);
+        toast.error("No customer found with this email.");
+      }
+    } catch (error) {
+      toast.error("Error fetching user data.");
+      console.error("Error fetching user:", error);
+    }
+  };
+
+  const fetchLocationsUsingCustomerId = async (customerId) => {
+    try {
+      const response = await fetch("/api/fetchlocationsusingcustomerid", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ customerId }),
+      });
+
+      const data = await response.json();
+      const locationIds = data.locationIds;
+
+      if (locationIds && locationIds.length > 0) {
+        fetchLocationDetails(locationIds);
+      } else {
+        setLocations([]);
+        toast.info("No locations found for this customer.");
+      }
+    } catch (error) {
+      toast.error("Error fetching locations.");
+      console.error("Error fetching locations:", error);
+    }
+  };
+
+  const fetchLocationDetails = async (locationIds) => {
+    try {
+      const response = await fetch("/api/fetchlocationsbyids", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ locationIds }),
+      });
+
+      const data = await response.json();
+      setLocations(data.locations || []); // Set the list of locations with full objects
+    } catch (error) {
+      toast.error("Error fetching location details.");
+      console.error("Error fetching location details:", error);
+    }
+  };
 
   const handleUnsubscribe = async (event) => {
     event.preventDefault();
 
-    if (!name || !email || !code) {
+    if (!name || !email || !code || !selectedLocation) {
       setMessage("All fields are required.");
-      toast.error("All fields are required.");
       return;
     }
-    // Perform unsubscribe logic here
-    toast.success("Request submitted successfully.");
+
+    try {
+      const response = await fetch("/api/unsubscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          customer_id: customer._id, // Send customer_id here
+          location_id: selectedLocation._id, // Send location's _id
+          code,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (response.status === 200) {
+        setCode(""); 
+        setName("");
+        setEmail("");
+        setLocations([]);
+        toast.success("Successfully unsubscribed from notifications!");
+      } else {
+        toast.error("Please verify to match email and code.");
+      }
+    } catch (error) {
+      toast.error("Error during unsubscribe process.");
+      console.error("Error unsubscribing:", error);
+    }
   };
 
   return (
@@ -46,10 +145,38 @@ export default function CustomerUnsubscribeForm() {
             type="email"
             id="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              const updatedEmail = e.target.value;
+              setEmail(updatedEmail); // Update the email state
+              fetchCustomerAndLocations(updatedEmail); // Trigger the fetch function
+            }}
             style={styles.input}
             required
           />
+        </div>
+        <div style={styles.formGroup}>
+          <label htmlFor="location" style={styles.label}>
+            Select Location:
+          </label>
+          <select
+            id="location"
+            value={selectedLocation ? selectedLocation._id : ""}
+            onChange={(e) => {
+              const selected = locations.find(
+                (location) => location._id === e.target.value
+              );
+              setSelectedLocation(selected); // Store the full location object
+            }}
+            style={styles.input}
+            required
+          >
+            <option value="">-- Select a Location --</option>
+            {locations.map((location) => (
+              <option key={location._id} value={location._id}>
+                {location.name} - {location.address}
+              </option>
+            ))}
+          </select>
         </div>
         <div style={styles.formGroup}>
           <label htmlFor="code" style={styles.label}>
@@ -126,9 +253,6 @@ const styles = {
     borderRadius: "4px",
     cursor: "pointer",
     transition: "background-color 0.3s",
-  },
-  buttonHover: {
-    backgroundColor: "#e04747",
   },
   message: {
     marginTop: "20px",

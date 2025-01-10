@@ -4,7 +4,7 @@ const customerSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     phone: { type: Number, required: true },
-    email: { type: String, required: true , lowercase: true},
+    email: { type: String, unique: true, required: true , lowercase: true},
     favfood: { type: String },
   },
   { timestamps: true }

@@ -4,7 +4,7 @@ import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"; // Verified Icon
+import { FaCheckCircle, FaTimesCircle,FaHourglassHalf } from "react-icons/fa"; // Verified Icon
 import { useRouter } from "next/navigation";
 
 export default function UserInfo() {
@@ -54,7 +54,7 @@ export default function UserInfo() {
   const fetchLocations = async (business_id) => {
     try {
       const response = await fetch(
-        `/api/locations?business_id=${business_id}`,
+        `/api/fetchlocationsbybusinessid?business_id=${business_id}`,
         {
           method: "GET",
           headers: {
@@ -162,15 +162,30 @@ export default function UserInfo() {
             </h2>
             {locations.length > 0 ? (
               <ul className="list-disc pl-6 space-y-2">
-                {locations.map((location, index) => (
-                  <li
-                    key={index}
-                    className="text-lg text-gray-700 hover:text-blue-500 cursor-pointer"
-                  >
+              {locations.map((location, index) => (
+                <li
+                  key={index}
+                  className="flex items-center space-x-2 text-lg text-gray-700 hover:text-blue-500 cursor-pointer"
+                >
+                  {/* Location Details */}
+                  <span>
                     {location.name} - {location.address}
-                  </li>
-                ))}
-              </ul>
+                  </span>
+                  {/* Status Icon */}
+                  <span>
+                    {location.adminstatus === "approved" && (
+                      <FaCheckCircle className="text-green-500" />
+                    )}
+                    {location.adminstatus === "pending" && (
+                      <FaHourglassHalf className="text-yellow-500" />
+                    )}
+                    {location.adminstatus === "rejected" && (
+                      <FaTimesCircle className="text-red-500" />
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
             ) : (
               <p className="text-gray-600">No locations available.</p>
             )}

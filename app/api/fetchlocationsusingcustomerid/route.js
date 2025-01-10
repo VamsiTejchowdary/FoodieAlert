@@ -10,7 +10,10 @@ export async function POST(req) {
     const { customerId } = await req.json();
 
     // Find all location IDs associated with the customerId
-    const locations = await LocationCustomer.find({ customer_id: customerId }).select("location_id");
+    const locations = await LocationCustomer.find({
+        customer_id: customerId,
+        subscription: true, // Ensure subscription is true
+      }).select("location_id");
 
     // Check if any locations are found
     if (locations.length > 0) {
