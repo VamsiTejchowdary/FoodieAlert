@@ -114,7 +114,7 @@ export default function UserInfo() {
     signOut({
       redirect: false,
     }).then(() => {
-      router.push("/");
+      router.push("/login");
     });
   };
 

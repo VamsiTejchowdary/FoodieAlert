@@ -59,7 +59,7 @@ export default function RegisterForm() {
         const form = e.target;
         form.reset();
         toast.success("User registration Successfull!", {
-          onClose: () => router.push("/"), // Navigate after toast disappears
+          onClose: () => router.push("/login"), // Navigate after toast disappears
         });
       } else {
         toast.error("User registration failed!");

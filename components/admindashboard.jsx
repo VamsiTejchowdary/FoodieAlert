@@ -13,7 +13,7 @@ export default function AdminDashboard() {
     signOut({
       redirect: false,
     }).then(() => {
-      router.push("/");
+      router.push("/login");
     });
   };
 
