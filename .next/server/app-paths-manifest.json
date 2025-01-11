@@ -1,11 +1,6 @@
 {
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/api/userExists/route": "app/api/userExists/route.js",
-  "/api/fetchlocationsbybusinessid/route": "app/api/fetchlocationsbybusinessid/route.js",
-  "/customerunsubscribe/page": "app/customerunsubscribe/page.js",
-  "/customerform/page": "app/customerform/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/register/page": "app/register/page.js",
   "/login/page": "app/login/page.js",
-  "/admindashboard/page": "app/admindashboard/page.js",
-  "/page": "app/page.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/page": "app/page.js"
 }
