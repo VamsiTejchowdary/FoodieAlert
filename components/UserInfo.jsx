@@ -114,9 +114,7 @@ export default function UserInfo() {
     signOut({
       redirect: false,
     }).then(() => {
-      toast.success("Logeed out Successfully!", {
-        onClose: () => router.push("/login"), // Navigate after toast disappears
-      });
+      router.push("/");
     });
   };
 

@@ -70,42 +70,79 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="grid place-items-center h-screen">
-      <div className="shadow-lg p-5 rounded-lg border-t-4 border-green-400">
-        <h1 className="text-xl font-bold my-4">Register</h1>
+    <div
+      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-r from-[#001f3d] to-[#243b4a]"
+    >
+      {/* Logo at the Top */}
+      <div className="flex justify-center mt-1 mb-0">
+        <img
+          src="herofoodielogo.png"
+          alt="Logo"
+          className="w-72 h-56 mt-1 mb-0 object-contain"
+        />
+      </div>
+
+      {/* Form Section */}
+      <div
+        className="shadow-lg p-6 rounded-lg border-t-4 border-green-400 w-full max-w-lg mx-4"
+        style={{
+          background: "linear-gradient(to right, #001f3d, #374958)", // Form background gradient
+        }}
+      >
+        <h1
+          className="text-2xl font-bold my-4 text-center"
+          style={{
+            background: "linear-gradient(to right, #ff6f61, #f86e4f)", // Heading gradient
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          Register
+        </h1>
+
         <ToastContainer />
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <input
             onChange={(e) => setName(e.target.value)}
             type="text"
             placeholder="Full Name"
+            className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
           />
           <input
             onChange={(e) => setEmail(e.target.value)}
             type="text"
             placeholder="Email"
+            className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
           />
           <input
             onChange={(e) => setNumber(e.target.value)}
             type="text"
             placeholder="Number"
+            className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
           />
           <input
             onChange={(e) => setBusinessName(e.target.value)}
             type="text"
             placeholder="Business Name"
+            className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
           />
           <input
             onChange={(e) => setBusinessAddress(e.target.value)}
             type="text"
             placeholder="Business Address"
+            className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
           />
           <input
             onChange={(e) => setPassword(e.target.value)}
             type="password"
             placeholder="Password"
+            className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
           />
-          <button className="bg-green-600 text-white font-bold cursor-pointer px-6 py-2">
+
+          <button
+            className="bg-gradient-to-r from-[#ff6f61] to-[#f86e4f] text-white font-bold cursor-pointer px-6 py-3 rounded hover:from-[#f56a50] hover:to-[#e95b40] transition-all w-full"
+            type="submit"
+          >
             Register
           </button>
 
@@ -115,8 +152,12 @@ export default function RegisterForm() {
             </div>
           )}
 
-          <Link className="text-sm mt-3 text-right" href={"/"}>
-            Already have an account? <span className="underline">Login</span>
+          <Link
+            className="text-sm text-center font-medium text-[#ff6f61] hover:text-[#f56a50] transition-all"
+            href={"/"}
+          >
+            Already have an account?{" "}
+            <span className="underline">Login</span>
           </Link>
         </form>
       </div>

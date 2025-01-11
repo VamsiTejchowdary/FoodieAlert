@@ -2,19 +2,14 @@
 import { useState, useEffect } from "react";
 
 const CustomerForm = () => {
-  // State to store form data
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
-  const [favFood, setfavFood] = useState("");
-
-  // State to store the list of locations fetched from MongoDB
+  const [favFood, setFavFood] = useState("");
   const [locations, setLocations] = useState([]);
-
   const [successMessage, setSuccessMessage] = useState("");
 
-  
   useEffect(() => {
     const fetchLocations = async () => {
       try {
@@ -25,7 +20,6 @@ const CustomerForm = () => {
           },
         });
         const data = await response.json();
-        console.log(data);
         setLocations(data.locations);
       } catch (error) {
         console.error("Error fetching locations:", error);
@@ -36,12 +30,11 @@ const CustomerForm = () => {
     }
   }, [email]);
 
-  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-     
+
     const code = Math.floor(1000 + Math.random() * 9000);
-  
+
     const formData = {
       name,
       phone,
@@ -50,9 +43,7 @@ const CustomerForm = () => {
       code,
       location_id: selectedLocation,
     };
-  
-    console.log("Form Data:", formData); // Debug: check what is being sent
-    
+
     try {
       const response = await fetch("/api/customersubscribe", {
         method: "POST",
@@ -61,20 +52,12 @@ const CustomerForm = () => {
         },
         body: JSON.stringify(formData),
       });
-  
+
       const result = await response.json();
       if (response.ok) {
         setSuccessMessage("Thank you for subscribing!");
-        setName(""); // Clear name field
-        setPhone(""); // Clear phone field
-        setEmail(""); // Clear email field
-        setfavFood(""); // Clear favFood field
-        setSelectedLocation(""); // Clear location selection
-  
-        // Clear the success message after a timeout
-        setTimeout(() => {
-          setSuccessMessage("");
-        }, 5000);
+        setName(""); setPhone(""); setEmail(""); setFavFood(""); setSelectedLocation("");
+        setTimeout(() => setSuccessMessage(""), 5000);
       } else {
         alert("An error occurred. Please try again.");
       }
@@ -85,150 +68,104 @@ const CustomerForm = () => {
   };
 
   return (
-    <div style={styles.pageContainer}>
-      <div style={styles.container}>
-        <h2 style={styles.heading}>Subscribe to Food Truck Notifications</h2>
+    <div
+      className="min-h-screen flex flex-col items-center justify-start py-8 sm:py-4"
+      style={{
+        background: "linear-gradient(to right, #001f3d, #243b4a)",
+      }}
+    >
+      <div className="flex justify-center mb-0 mt-4 sm:mt-2">
+        <img
+          src="herofoodielogo.png"
+          alt="Logo"
+          className="w-56 h-56 object-contain"
+        />
+      </div>
+
+      <div
+        className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-lg"
+        style={{
+          background: "linear-gradient(to right, #001f3d, #243b4a)",
+        }}
+      >
+        <h2
+          className="text-2xl text-center text-[#ff6f61] font-bold mb-1"
+          style={{
+            background: "linear-gradient(to right, #ff6f61, #f86e4f)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          Subscribe to Food Truck Notifications
+        </h2>
+
         {successMessage && (
-          <div style={styles.successMessage}>{successMessage}</div>
+          <div className="bg-[#d4edda] text-[#155724] p-4 mb-4 rounded-md border border-[#c3e6cb] text-center">
+            {successMessage}
+          </div>
         )}
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.formGroup}>
-            <label htmlFor="name" style={styles.label}>Your Name</label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              style={styles.input}
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <label htmlFor="phone" style={styles.label}>Phone Number</label>
-            <input
-              type="number"
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-              style={styles.input}
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <label htmlFor="email" style={styles.label}>Email Address</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              style={styles.input}
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <label htmlFor="favfood" style={styles.label}>Favourite Food</label>
-            <input
-              type="text"
-              id="favfood"
-              value={favFood}
-              onChange={(e) => setfavFood(e.target.value)}
-              required
-              style={styles.input}
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <label htmlFor="location" style={styles.label}>Select Location</label>
-            <select
-              id="location"
-              value={selectedLocation}
-              onChange={(e) => setSelectedLocation(e.target.value)}
-              required
-              style={styles.select}
-            >
-              <option value="">Select a location</option>
-              {locations.map((location) => (
-                <option key={location._id} value={location._id}>
-                  {location.name} - {location.address}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div style={styles.formGroup}>
-            <button type="submit" style={styles.button}>Subscribe</button>
-          </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            placeholder="Your Name"
+            className="w-full px-4 py-2 border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61]"
+          />
+
+          <input
+            type="number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+            placeholder="Phone Number"
+            className="w-full px-4 py-2 border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61]"
+          />
+
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="Email Address"
+            className="w-full px-4 py-2 border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61]"
+          />
+
+          <input
+            type="text"
+            value={favFood}
+            onChange={(e) => setFavFood(e.target.value)}
+            required
+            placeholder="Favourite Food"
+            className="w-full px-4 py-2 border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61]"
+          />
+
+          <select
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+            required
+            className="w-full px-4 py-2 border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61]"
+          >
+            <option value="">Select a location</option>
+            {locations.map((location) => (
+              <option key={location._id} value={location._id}>
+                {location.name} - {location.address}
+              </option>
+            ))}
+          </select>
+
+          <button
+            type="submit"
+            className="w-full py-3 bg-[#ff6f61] text-white font-semibold rounded-md hover:bg-[#f86e4f] focus:outline-none focus:ring-2 focus:ring-[#f86e4f]"
+          >
+            Subscribe
+          </button>
         </form>
       </div>
     </div>
   );
-};
-
-const styles = {
-  pageContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    backgroundColor: "#f0f0f0",
-  },
-  container: {
-    maxWidth: "600px",
-    width: "100%",
-    padding: "20px",
-    backgroundColor: "#fff",
-    borderRadius: "8px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  },
-  heading: {
-    textAlign: "center",
-    color: "#333",
-    marginBottom: "20px",
-  },
-  successMessage: {
-    backgroundColor: "#d4edda",
-    color: "#155724",
-    padding: "10px",
-    marginBottom: "20px",
-    borderRadius: "5px",
-    textAlign: "center",
-    border: "1px solid #c3e6cb",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  formGroup: {
-    marginBottom: "15px",
-  },
-  label: {
-    fontSize: "14px",
-    marginBottom: "5px",
-    color: "#555",
-  },
-  input: {
-    padding: "10px",
-    fontSize: "14px",
-    borderRadius: "4px",
-    border: "1px solid #ddd",
-    width: "100%",
-  },
-  select: {
-    padding: "10px",
-    fontSize: "14px",
-    borderRadius: "4px",
-    border: "1px solid #ddd",
-    width: "100%",
-  },
-  button: {
-    padding: "12px",
-    fontSize: "16px",
-    backgroundColor: "#007BFF",
-    color: "#fff",
-    borderRadius: "4px",
-    border: "none",
-    cursor: "pointer",
-    width: "100%",
-    transition: "background-color 0.3s",
-  },
 };
 
 export default CustomerForm;

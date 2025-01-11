@@ -121,45 +121,70 @@ export default function CustomerUnsubscribeForm() {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Unsubscribe from Notifications</h2>
-      <form onSubmit={handleUnsubscribe} style={styles.form}>
-        <div style={styles.formGroup}>
-          <label htmlFor="name" style={styles.label}>
-            Name:
-          </label>
+    <div
+      className="min-h-screen flex flex-col items-center justify-start py-8"
+      style={{
+        background: "linear-gradient(to right, #001f3d, #243b4a)",
+      }}
+    >
+      <div className="flex justify-center mb-0 mt-0">
+        <img
+          src="herofoodielogo.png"
+          alt="Logo"
+          className="w-56 h-56 object-contain"
+          style={{
+            marginTop: "-30px",
+          }}
+        />
+      </div>
+
+      <div
+        className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-lg"
+        style={{
+          background: "linear-gradient(to right, #001f3d, #243b4a)",
+        }}
+      >
+        <h2
+          className="text-2xl text-center text-[#ff6f61] font-bold mb-1"
+          style={{
+            background: "linear-gradient(to right, #ff6f61, #f86e4f)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          Unsubscribe from Food Truck Notifications
+        </h2>
+
+        {message && (
+          <div className="bg-[#d4edda] text-[#155724] p-4 mb-4 rounded-md border border-[#c3e6cb] text-center">
+            {message}
+          </div>
+        )}
+
+        <form onSubmit={handleUnsubscribe} className="space-y-4">
           <input
             type="text"
-            id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            style={styles.input}
             required
+            placeholder="Your Name"
+            className="w-full px-4 py-2 border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61]"
           />
-        </div>
-        <div style={styles.formGroup}>
-          <label htmlFor="email" style={styles.label}>
-            Email:
-          </label>
+
           <input
             type="email"
-            id="email"
             value={email}
             onChange={(e) => {
               const updatedEmail = e.target.value;
               setEmail(updatedEmail); // Update the email state
               fetchCustomerAndLocations(updatedEmail); // Trigger the fetch function
             }}
-            style={styles.input}
             required
+            placeholder="Email Address"
+            className="w-full px-4 py-2 border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61]"
           />
-        </div>
-        <div style={styles.formGroup}>
-          <label htmlFor="location" style={styles.label}>
-            Select Location:
-          </label>
+
           <select
-            id="location"
             value={selectedLocation ? selectedLocation._id : ""}
             onChange={(e) => {
               const selected = locations.find(
@@ -167,96 +192,36 @@ export default function CustomerUnsubscribeForm() {
               );
               setSelectedLocation(selected); // Store the full location object
             }}
-            style={styles.input}
             required
+            className="w-full px-4 py-2 border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61]"
           >
-            <option value="">-- Select a Location --</option>
+            <option value="">Select a location</option>
             {locations.map((location) => (
               <option key={location._id} value={location._id}>
                 {location.name} - {location.address}
               </option>
             ))}
           </select>
-        </div>
-        <div style={styles.formGroup}>
-          <label htmlFor="code" style={styles.label}>
-            Code:
-          </label>
+
           <input
             type="text"
-            id="code"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            style={styles.input}
             required
+            placeholder="Code"
+            className="w-full px-4 py-2 border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61]"
           />
-        </div>
-        <button type="submit" style={styles.button}>
-          Unsubscribe
-        </button>
-      </form>
-      {message && <p style={styles.message}>{message}</p>}
+
+          <button
+            type="submit"
+            className="w-full py-3 bg-[#ff6f61] text-white font-semibold rounded-md hover:bg-[#ff6f61] focus:outline-none focus:ring-2 focus:ring-[#ff6f61]"
+          >
+            Unsubscribe
+          </button>
+        </form>
+      </div>
+
       <ToastContainer />
     </div>
   );
 }
-
-const styles = {
-  container: {
-    maxWidth: "400px",
-    margin: "50px auto",
-    padding: "20px",
-    backgroundColor: "#f9f9f9",
-    borderRadius: "8px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    textAlign: "center",
-    fontFamily: "'Arial', sans-serif",
-  },
-  title: {
-    fontSize: "24px",
-    fontWeight: "bold",
-    marginBottom: "20px",
-    color: "#333",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
-  },
-  formGroup: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-  },
-  label: {
-    fontSize: "16px",
-    fontWeight: "bold",
-    marginBottom: "5px",
-    color: "#555",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    fontSize: "14px",
-    borderRadius: "4px",
-    border: "1px solid #ddd",
-    outline: "none",
-    boxSizing: "border-box",
-  },
-  button: {
-    padding: "10px 20px",
-    fontSize: "16px",
-    fontWeight: "bold",
-    color: "#fff",
-    backgroundColor: "#ff5c5c",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    transition: "background-color 0.3s",
-  },
-  message: {
-    marginTop: "20px",
-    fontSize: "14px",
-    color: "#ff5c5c",
-  },
-};
