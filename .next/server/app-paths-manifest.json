@@ -1,6 +1,26 @@
 {
+  "/api/admindashboard/fetchlocations/route": "app/api/admindashboard/fetchlocations/route.js",
+  "/api/admindashboard/updateuserstatus/route": "app/api/admindashboard/updateuserstatus/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/admindashboard/updatelocationstatus/route": "app/api/admindashboard/updatelocationstatus/route.js",
+  "/api/customersubscribe/route": "app/api/customersubscribe/route.js",
+  "/api/fetchlocationsbyids/route": "app/api/fetchlocationsbyids/route.js",
+  "/api/fetchallusers/route": "app/api/fetchallusers/route.js",
+  "/api/fetchlocationsbybusinessid/route": "app/api/fetchlocationsbybusinessid/route.js",
+  "/api/findcustomerbyemail/route": "app/api/findcustomerbyemail/route.js",
+  "/api/locations/route": "app/api/locations/route.js",
+  "/api/fetchlocationsusingcustomerid/route": "app/api/fetchlocationsusingcustomerid/route.js",
+  "/api/register/route": "app/api/register/route.js",
+  "/api/unsubscribe/route": "app/api/unsubscribe/route.js",
+  "/api/registernewlocation/route": "app/api/registernewlocation/route.js",
+  "/api/userExists/route": "app/api/userExists/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/admindashboard/page": "app/admindashboard/page.js",
+  "/customerunsubscribe/page": "app/customerunsubscribe/page.js",
+  "/customerform/page": "app/customerform/page.js",
+  "/page": "app/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/register/page": "app/register/page.js",
   "/login/page": "app/login/page.js",
-  "/page": "app/page.js"
+  "/register/page": "app/register/page.js"
 }

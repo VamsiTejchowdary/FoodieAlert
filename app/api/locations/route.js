@@ -69,7 +69,7 @@ export async function GET(request) {
       }));
     }
 
-    console.log("Filtered locations:", locations);
+    // console.log("Filtered locations:", locations);
 
     return new Response(
       JSON.stringify({ locations }), // Return only filtered locations
