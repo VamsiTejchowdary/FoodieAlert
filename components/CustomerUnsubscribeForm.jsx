@@ -30,7 +30,6 @@ export default function CustomerUnsubscribeForm() {
         fetchLocationsUsingCustomerId(customer._id);
       } else {
         setLocations([]);
-        toast.error("No customer found with this email.");
       }
     } catch (error) {
       toast.error("Error fetching user data.");

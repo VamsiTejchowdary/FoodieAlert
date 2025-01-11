@@ -49,7 +49,24 @@ export async function GET(request) {
         }));
       } else {
         console.log("No customer found for the given email.");
+        // If no customer is found, show all approved locations
+        const allApprovedLocations = await Location.find({
+          adminstatus: "approved", // Only approved locations
+        });
+
+        locations = allApprovedLocations.map((location) => ({
+          ...location._doc,
+        }));
       }
+    } else {
+      // If no email is provided, show all approved locations
+      const allApprovedLocations = await Location.find({
+        adminstatus: "approved", // Only approved locations
+      });
+
+      locations = allApprovedLocations.map((location) => ({
+        ...location._doc,
+      }));
     }
 
     console.log("Filtered locations:", locations);
