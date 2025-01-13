@@ -4,25 +4,34 @@ import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaCheckCircle, FaTimesCircle,FaHourglassHalf } from "react-icons/fa"; // Verified Icon
+import {
+  FaCheckCircle,
+  FaTimesCircle,
+  FaHourglassHalf,
+  FaBell,
+} from "react-icons/fa"; // Added Bell Icon
 import { useRouter } from "next/navigation";
 
 export default function UserInfo() {
   const { data: session, status } = useSession();
   const [locations, setLocations] = useState([]);
   const router = useRouter();
-  const [user, setUser] = useState(null); // Store user details
-  const [isModalOpen, setIsModalOpen] = useState(false); // For modal visibility
-  const [businessName, setBusinessName] = useState(""); // Input field for Business Name
-  const [businessAddress, setBusinessAddress] = useState(""); // Input field for Business Location
+  const [user, setUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [businessName, setBusinessName] = useState("");
+  const [businessAddress, setBusinessAddress] = useState("");
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [inTime, setInTime] = useState("");
+  const [outTime, setOutTime] = useState("");
 
   useEffect(() => {
-    if (status === "loading") return; // Wait until session is fully loaded
+    if (status === "loading") return;
 
     if (session?.user?.email) {
       const email = session.user.email;
 
-      // Fetch user data
       const resUserExists = async () => {
         try {
           const response = await fetch("api/userExists", {
@@ -34,10 +43,9 @@ export default function UserInfo() {
           });
 
           const data = await response.json();
-          const user = data.user; // User object from the response
-          setUser(user); // Save user to state
+          const user = data.user;
+          setUser(user);
 
-          // Fetch locations using user ID as business_id
           if (user?._id) {
             fetchLocations(user._id);
           }
@@ -49,7 +57,7 @@ export default function UserInfo() {
 
       resUserExists();
     }
-  }, [session, status]); // Dependency array to re-run when session or status changes
+  }, [session, status]);
 
   const fetchLocations = async (business_id) => {
     try {
@@ -63,7 +71,7 @@ export default function UserInfo() {
         }
       );
       const data = await response.json();
-      setLocations(data.locations || []); // Save locations to state
+      setLocations(data.locations || []);
     } catch (error) {
       toast.error("Error fetching locations.");
       console.error("Error fetching locations:", error);
@@ -96,7 +104,7 @@ export default function UserInfo() {
         setBusinessName("");
         setBusinessAddress("");
         setIsModalOpen(false);
-        fetchLocations(user?._id); // Refresh locations
+        fetchLocations(user?._id);
       } else {
         toast.error("Failed to add location.");
       }
@@ -106,10 +114,6 @@ export default function UserInfo() {
     }
   };
 
-  if (status === "loading") {
-    return <div>Loading...</div>; // Show loading until session is ready
-  }
-
   const handleSignOut = () => {
     signOut({
       redirect: false,
@@ -118,27 +122,58 @@ export default function UserInfo() {
     });
   };
 
-  return (
-    <div className="grid place-items-center h-screen bg-gray-100 p-4">
-      {/* Toaster container */}
-      <ToastContainer />
+  const handleSendAlert = () => {
+    toast.success("Alert sent successfully!");
+    setIsAlertModalOpen(false);
+  };
 
-      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-lg space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-semibold text-gray-800">
-            Hello {session?.user?.name}
-          </h1>
-          {user?.status === "approved" && (
-            <FaCheckCircle className="text-green-500 text-2xl" />
-          )}
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div
+      className="grid place-items-center h-screen bg-gray-50 p-4"
+      style={{ background: "linear-gradient(to right, #001f3d, #243b4a)" }}
+    >
+      <ToastContainer />
+      <div
+        className="flex justify-center my-6"
+        style={{
+          marginTop: "-250px",
+        }}
+      >
+        <img
+          src="foodeehero.png"
+          alt="Logo"
+          className="w-64 h-64 md:w-72 md:h-72 object-contain"
+        />
+      </div>
+
+      <div
+        className="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-lg space-y-6"
+        style={{
+          background: "linear-gradient(to right, #001f3d, #243b4a)",
+          marginTop: "-200px",
+        }}
+      >
+        <div className="relative bg-gradient-to-r from-[#ff7900] to-[#22005c] text-white p-6 sm:p-8 rounded-lg">
+          <div className="relative z-10">
+            <h1 className="text-2xl sm:text-3xl font-semibold">
+              Hello, {session?.user?.name}
+              {user?.status === "approved" && (
+                <FaCheckCircle className="text-green-500 text-lg sm:text-xl ml-2 inline" />
+              )}
+            </h1>
+          </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 mt-6">
           <div>
-            <p className="text-lg font-medium text-gray-600">
+            <p className="text-lg font-medium text-gray-300">
               <strong>Email:</strong> {session?.user?.email}
             </p>
-            <p className="text-lg font-medium text-gray-600">
+            <p className="text-lg font-medium text-gray-300">
               <strong>Status:</strong>{" "}
               <span
                 className={`${
@@ -157,35 +192,33 @@ export default function UserInfo() {
 
         {user?.status === "approved" && (
           <div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            <h2 className="text-xl font-semibold text-gray-200 mb-4">
               Locations
             </h2>
             {locations.length > 0 ? (
-              <ul className="list-disc pl-6 space-y-2">
-              {locations.map((location, index) => (
-                <li
-                  key={index}
-                  className="flex items-center space-x-2 text-lg text-gray-700 hover:text-blue-500 cursor-pointer"
-                >
-                  {/* Location Details */}
-                  <span>
-                    {location.name} - {location.address}
-                  </span>
-                  {/* Status Icon */}
-                  <span>
-                    {location.adminstatus === "approved" && (
-                      <FaCheckCircle className="text-green-500" />
-                    )}
-                    {location.adminstatus === "pending" && (
-                      <FaHourglassHalf className="text-yellow-500" />
-                    )}
-                    {location.adminstatus === "rejected" && (
-                      <FaTimesCircle className="text-red-500" />
-                    )}
-                  </span>
-                </li>
-              ))}
-            </ul>
+              <ul className="list-disc pl-6 space-y-2 text-gray-300">
+                {locations.map((location, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center space-x-2 text-lg text-gray-200 hover:text-blue-500 cursor-pointer"
+                  >
+                    <span>
+                      {location.name} - {location.address}
+                    </span>
+                    <span>
+                      {location.adminstatus === "approved" && (
+                        <FaCheckCircle className="text-green-500" />
+                      )}
+                      {location.adminstatus === "pending" && (
+                        <FaHourglassHalf className="text-yellow-500" />
+                      )}
+                      {location.adminstatus === "rejected" && (
+                        <FaTimesCircle className="text-red-500" />
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             ) : (
               <p className="text-gray-600">No locations available.</p>
             )}
@@ -193,36 +226,31 @@ export default function UserInfo() {
         )}
 
         {user?.status === "approved" && (
-          <div>
-            {/* Add Location Button */}
+          <div className="flex space-x-4 mt-4">
             <button
               onClick={() => setIsModalOpen(true)}
-              disabled={user?.status !== "approved"}
-              className={`w-full px-6 py-3 rounded-lg text-white font-semibold ${
-                user?.status === "approved"
-                  ? "bg-blue-600 hover:bg-blue-700"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              } transition duration-300 ease-in-out transform hover:scale-105`}
+              className="px-4 py-2 rounded-lg text-white font-semibold bg-[#ff7900] hover:bg-[#22005c] transition duration-300 ease-in-out transform hover:scale-105"
             >
               Add Location
             </button>
+            <FaBell
+              onClick={() => setIsAlertModalOpen(true)}
+              className="text-white text-2xl cursor-pointer hover:text-yellow-400"
+            />
           </div>
         )}
 
-        {/* Logout Button */}
         <button
           onClick={handleSignOut}
-          className="w-full bg-red-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out transform hover:scale-105"
+          className="bg-red-600 text-white font-bold px-6 py-2 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out transform hover:scale-105"
         >
           Log Out
         </button>
       </div>
 
-      {/* Modal for Adding Location */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
-            {/* Close Button */}
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 right-4 text-gray-600 hover:text-black"
@@ -263,9 +291,98 @@ export default function UserInfo() {
 
               <button
                 onClick={addNewLocation}
-                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105"
+                className="w-full bg-[#ff7900] text-white py-3 rounded-lg font-semibold hover:bg-[#22005c] transition duration-300 ease-in-out transform hover:scale-105"
               >
                 Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isAlertModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gradient-to-r from-[#001f3d] to-[#243b4a] p-8 rounded-lg shadow-lg w-full max-w-md relative">
+            <button
+              onClick={() => setIsAlertModalOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-gray-400"
+            >
+              <FaTimesCircle className="text-xl" />
+            </button>
+
+            <h2
+              className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff6f61] to-[#f86e4f] mb-6"
+              style={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Send Alert
+            </h2>
+
+            <div className="space-y-6">
+              <div>
+                <label className="block text-lg font-medium text-white mb-2">
+                  Select Location
+                </label>
+                <select
+                  value={selectedLocation}
+                  onChange={(e) => setSelectedLocation(e.target.value)}
+                  className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+                >
+                  <option value="">Select Location</option>
+                  {locations
+                    .filter((loc) => loc.adminstatus === "approved")
+                    .map((location) => (
+                      <option key={location._id} value={location._id}>
+                        {location.name} - {location.address}
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-lg font-medium text-white mb-2">
+                  Compose Message
+                </label>
+                <textarea
+                  value={alertMessage}
+                  onChange={(e) => setAlertMessage(e.target.value)}
+                  className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+                  rows="4"
+                  placeholder="Enter your alert message"
+                />
+              </div>
+
+              <div>
+                <label className="block text-lg font-medium text-white mb-2">
+                  In Time
+                </label>
+                <input
+                  type="datetime-local"
+                  value={inTime}
+                  onChange={(e) => setInTime(e.target.value)}
+                  className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+                />
+              </div>
+
+              <div>
+                <label className="block text-lg font-medium text-white mb-2">
+                  Out Time
+                </label>
+                <input
+                  type="datetime-local"
+                  value={outTime}
+                  onChange={(e) => setOutTime(e.target.value)}
+                  className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+                />
+              </div>
+
+              <button
+                onClick={handleSendAlert}
+                className="w-full bg-gradient-to-r from-[#ff6f61] to-[#f86e4f] text-white py-3 rounded-lg font-semibold hover:from-[#f56a50] hover:to-[#e95b40] transition-all"
+              >
+                Send Alert
               </button>
             </div>
           </div>

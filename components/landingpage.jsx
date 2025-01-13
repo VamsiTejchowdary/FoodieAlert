@@ -206,7 +206,7 @@ export default function LandingPage() {
         {/* Hero Section */}
         <section className="hero">
           <img
-            src="herofoodie.png" // Update with your logo's image URL
+            src="foodeehero.png" // Update with your logo's image URL
             alt="FoodieAlert Logo"
             className="hero-img"
           />

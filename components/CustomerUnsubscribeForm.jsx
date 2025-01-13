@@ -127,10 +127,10 @@ export default function CustomerUnsubscribeForm() {
       }}
     >
       <div className="flex justify-center mb-0 mt-0">
-        <img
-          src="herofoodielogo.png"
+      <img
+          src="foodeehero.png"
           alt="Logo"
-          className="w-56 h-56 object-contain"
+          className="w-64 h-64 md:w-72 md:h-72 object-contain"
           style={{
             marginTop: "-40px",
           }}

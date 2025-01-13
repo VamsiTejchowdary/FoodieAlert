@@ -79,9 +79,9 @@ export default function RegisterForm() {
         marginTop: "-40px",
       }}>
         <img
-          src="herofoodielogo.png"
+          src="foodeehero.png"
           alt="Logo"
-          className="w-72 h-56 mt-1 mb-0 object-contain"
+          className="w-64 h-64 md:w-72 md:h-72 object-contain"
         />
       </div>
 
@@ -89,7 +89,7 @@ export default function RegisterForm() {
       <div
         className="shadow-lg p-6 rounded-lg border-t-4 border-green-400 w-full max-w-lg mx-4"
         style={{
-          background: "linear-gradient(to right, #001f3d, #374958)", // Form background gradient
+          background: "linear-gradient(to right, #001f3d, #374958)"
         }}
       >
         <h1

@@ -121,7 +121,11 @@ export default function AdminDashboard() {
       style={{
         marginTop: "-40px",
       }}>
-        <img src="herofoodielogo.png" alt="Logo" className="w-36 h-36 md:w-56 md:h-56 object-contain" />
+       <img
+          src="foodeehero.png"
+          alt="Logo"
+          className="w-64 h-64 md:w-72 md:h-72 object-contain"
+        />
       </div>
       <div className="relative text-2xl font-bold p-2 inline-block rounded" style={{ color: "#ff6f61", top: "-30px" }}>
         Admin Dashboard

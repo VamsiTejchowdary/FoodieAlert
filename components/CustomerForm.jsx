@@ -95,9 +95,9 @@ const CustomerForm = () => {
       }}
       >
         <img
-          src="herofoodielogo.png"
+          src="foodeehero.png"
           alt="Logo"
-          className="w-56 h-56 object-contain"
+          className="w-64 h-64 md:w-72 md:h-72 object-contain"
         />
       </div>
 
