@@ -74,7 +74,10 @@ export default function RegisterForm() {
       className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-r from-[#001f3d] to-[#243b4a]"
     >
       {/* Logo at the Top */}
-      <div className="flex justify-center mt-1 mb-0">
+      <div className="flex justify-center mt-1 mb-0"
+      style={{
+        marginTop: "-40px",
+      }}>
         <img
           src="herofoodielogo.png"
           alt="Logo"

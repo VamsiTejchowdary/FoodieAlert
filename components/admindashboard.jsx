@@ -117,7 +117,10 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen flex flex-col items-center" style={{ background: "linear-gradient(to right, #001f3d, #243b4a)" }}>
       <ToastContainer />
-      <div className="flex justify-center my-6">
+      <div className="flex justify-center my-6"
+      style={{
+        marginTop: "-40px",
+      }}>
         <img src="herofoodielogo.png" alt="Logo" className="w-36 h-36 md:w-56 md:h-56 object-contain" />
       </div>
       <div className="relative text-2xl font-bold p-2 inline-block rounded" style={{ color: "#ff6f61", top: "-30px" }}>

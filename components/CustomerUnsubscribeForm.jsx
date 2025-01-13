@@ -132,7 +132,7 @@ export default function CustomerUnsubscribeForm() {
           alt="Logo"
           className="w-56 h-56 object-contain"
           style={{
-            marginTop: "-30px",
+            marginTop: "-40px",
           }}
         />
       </div>
