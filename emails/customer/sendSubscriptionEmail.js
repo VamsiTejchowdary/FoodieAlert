@@ -5,20 +5,18 @@ export const sendEmail = async (email, name, code, locationName,locationAddress)
   try {
    // console.log("Sending email to:", email, name, code, locationName, locationAddress);
 
-    const serviceID = "FoodeAlert"; // Your EmailJS service ID
-    const templateID = "foodealert"; // Your template ID
-    const userID = "Wl5215FfRpqukGjrP"; // Your EmailJS public key
-
-    // Corrected emailjs.send() syntax:
-    console.log("Sending email to:", email, name, code);
-    const response = await emailjs.send(serviceID, templateID, {
+   const serviceID = process.env.REACT_APP_SERVICE_ID;
+   const templateID = process.env.REACT_APP_TEMPLATE_ID;
+   const userID = process.env.REACT_APP_USER_ID;
+   
+   console.log("Sending email to:", email, name, code);
+   const response = await emailjs.send(serviceID, templateID, {
       user_name: name,
       email: email,
       food_truck_name: locationName,
       food_truck_location: locationAddress,
       unsubscribe_code: code,
-
-    }, userID); // Pass userID as the last argument
+   }, userID);
 
     if (response.status === 200) {
       console.log("Email sent successfully");
