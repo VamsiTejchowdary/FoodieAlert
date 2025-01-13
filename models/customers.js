@@ -6,6 +6,7 @@ const customerSchema = new mongoose.Schema(
     phone: { type: Number, required: true },
     email: { type: String, unique: true, required: true , lowercase: true},
     favfood: { type: String },
+    code: { type: Number, required: true , default: 0},
   },
   { timestamps: true }
 );

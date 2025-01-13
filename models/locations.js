@@ -19,6 +19,11 @@ const locationSchema = new Schema(
       required: true,
       trim: true, // Removes whitespace from address
     },
+    messagechannel: {
+      type: String,
+      required: true,
+      default: 'email',
+    },
     adminstatus: { type: String, default: 'pending' },
     activestatus: { type: Boolean, default: true }
   },

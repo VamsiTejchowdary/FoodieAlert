@@ -111,7 +111,7 @@ export default function CustomerUnsubscribeForm() {
         setLocations([]);
         toast.success("Successfully unsubscribed from notifications!");
       } else {
-        toast.error("Please verify to match email and code.");
+        toast.error(data.message || "Error during unsubscribe process.");
       }
     } catch (error) {
       toast.error("Error during unsubscribe process.");

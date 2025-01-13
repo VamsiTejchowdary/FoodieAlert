@@ -62,10 +62,12 @@ export default function LoginForm() {
       }}
     >
       {/* Logo Section */}
-      <div className="flex justify-center my-6"
-      style={{
-        marginTop: "-40px",
-      }}>
+      <div
+        className="flex justify-center my-6"
+        style={{
+          marginTop: "-40px",
+        }}
+      >
         <img
           src="foodeehero.png"
           alt="Logo"
@@ -135,5 +137,6 @@ export default function LoginForm() {
         </form>
       </div>
     </div>
+    
   );
 }

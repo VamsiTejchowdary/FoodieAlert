@@ -20,6 +20,10 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    passcode: {
+      type: Number,
+      required: true,
+    },
     role: {
       type: String,
       default: 'user', // Default value for role

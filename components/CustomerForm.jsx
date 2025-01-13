@@ -38,14 +38,13 @@ const CustomerForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const code = Math.floor(1000 + Math.random() * 9000);
+    
 
     const formData = {
       name,
       phone,
       email,
       favfood: favFood,
-      code,
       location_id: selectedLocation,
     };
 
@@ -61,10 +60,11 @@ const CustomerForm = () => {
 
 
       if (response.ok) {
-        //const bccList = ["dabbarvy@mail.uc.edu", "d.vamsitej143@gmail.com"];
-        // Send email directly from frontend using EmailJS
+        const responseData = await response.json(); // Parse the JSON response
+        const customer = responseData.customer; // Access the customer object
+        const customerCode = customer.code; 
         console.log("selectedLocationDetails: ", locationDetails);
-        await sendEmail(formData.email, formData.name, formData.code, locationDetails.name, locationDetails.address);
+        await sendEmail(formData.email, formData.name, customerCode, locationDetails.name, locationDetails.address);
 
         setSuccessMessage("Thank you for subscribing!");
         setName("");

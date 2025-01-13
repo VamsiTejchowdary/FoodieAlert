@@ -13,6 +13,7 @@ export default function RegisterForm() {
   const [password, setPassword] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [businessAddress, setBusinessAddress] = useState("");
+  const [messageChannel, setMessageChannel] = useState("");
   const [error, setError] = useState("");
 
   const router = useRouter();
@@ -20,7 +21,14 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !email || !password || !number || !businessName || !businessAddress) {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !number ||
+      !businessName ||
+      !businessAddress
+    ) {
       setError("All fields are necessary.");
       return;
     }
@@ -39,7 +47,7 @@ export default function RegisterForm() {
         toast.error("User already exists.");
         return;
       }
-
+      const passcode = Math.floor(1000 + Math.random() * 9000);
       const res = await fetch("api/register", {
         method: "POST",
         headers: {
@@ -50,15 +58,17 @@ export default function RegisterForm() {
           email,
           password,
           number,
+          passcode,
           businessName,
           businessAddress,
+          messageChannel, // Include message channel in the payload
         }),
       });
 
       if (res.ok) {
         const form = e.target;
         form.reset();
-        toast.success("User registration Successfull!", {
+        toast.success("User registration Successful!", {
           onClose: () => router.push("/login"), // Navigate after toast disappears
         });
       } else {
@@ -70,14 +80,14 @@ export default function RegisterForm() {
   };
 
   return (
-    <div
-      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-r from-[#001f3d] to-[#243b4a]"
-    >
+    <div className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-r from-[#001f3d] to-[#243b4a]">
       {/* Logo at the Top */}
-      <div className="flex justify-center mt-1 mb-0"
-      style={{
-        marginTop: "-40px",
-      }}>
+      <div
+        className="flex justify-center mt-1 mb-0"
+        style={{
+          marginTop: "-40px",
+        }}
+      >
         <img
           src="foodeehero.png"
           alt="Logo"
@@ -89,13 +99,13 @@ export default function RegisterForm() {
       <div
         className="shadow-lg p-6 rounded-lg border-t-4 border-green-400 w-full max-w-lg mx-4"
         style={{
-          background: "linear-gradient(to right, #001f3d, #374958)"
+          background: "linear-gradient(to right, #001f3d, #374958)",
         }}
       >
         <h1
           className="text-2xl font-bold my-4 text-center"
           style={{
-            background: "linear-gradient(to right, #ff6f61, #f86e4f)", // Heading gradient
+            background: "linear-gradient(to right, #ff6f61, #f86e4f)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
           }}
@@ -135,6 +145,18 @@ export default function RegisterForm() {
             placeholder="Business Address"
             className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
           />
+          {/* Dropdown for Message Channel */}
+          <select
+            onChange={(e) => setMessageChannel(e.target.value)}
+            value={messageChannel}
+            className="p-4 rounded border-none bg-[#243b4a] text-white focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+          >
+            <option value="option">Select Channel</option>
+            <option value="sms">SMS</option>
+            <option value="email">Email</option>
+            <option value="both">Both</option>
+          </select>
+
           <input
             onChange={(e) => setPassword(e.target.value)}
             type="password"
@@ -157,13 +179,22 @@ export default function RegisterForm() {
 
           <Link
             className="text-sm text-center font-medium text-[#ff6f61] hover:text-[#f56a50] transition-all"
-            href={"/"}
+            href={"/login"}
           >
-            Already have an account?{" "}
-            <span className="underline">Login</span>
+            Already have an account? <span className="underline">Login</span>
           </Link>
         </form>
       </div>
+      <footer
+        className="footer"
+        style={{
+          padding: "30px",
+          textAlign: "center",
+          color: "#ddd",
+        }}
+      >
+        <p>&copy; 2025 FoodeAlert. All rights reserved.</p>
+      </footer>
     </div>
   );
 }

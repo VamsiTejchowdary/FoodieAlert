@@ -5,12 +5,12 @@ import { NextResponse } from "next/server"; // Import MongoDB connection functio
 
 export async function POST(req) {
   try {
-    const { name, email, password, number, businessName, businessAddress } = await req.json();
+    const { name, email, password, number, passcode , businessName, businessAddress,messageChannel } = await req.json();
 
     // Connect to MongoDB
     await connectMongoDB();
-
-    const user = await User.create({ name, email, number, password});
+    
+    const user = await User.create({ name, email, number, password, passcode });
 
     // Access the user_id (which is the _id field)
     const user_id = user._id;
@@ -20,6 +20,7 @@ export async function POST(req) {
       business_id: user_id, // Link location to the newly created user
       name: businessName, // Use business_name here
       address: businessAddress,
+      messagechannel: messageChannel,
     });
 
     return NextResponse.json(

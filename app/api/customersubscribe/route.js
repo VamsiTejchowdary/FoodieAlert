@@ -4,7 +4,7 @@ import { connectMongoDB } from "@/lib/mongodb"; // Import MongoDB connection fun
 
 export async function POST(req) {
   try {
-    const { name, phone, email, favfood, code, location_id } = await req.json();
+    const { name, phone, email, favfood, location_id } = await req.json();
 
     // Connect to the database
     await connectMongoDB();
@@ -14,7 +14,8 @@ export async function POST(req) {
 
     if (!customer) {
       // Create a new customer if not found
-      customer = await Customer.create({ name, phone, email, favfood });
+      const code = Math.floor(1000 + Math.random() * 9000);
+      customer = await Customer.create({ name, phone, email, favfood, code });
     }
 
     // Check if the customer has already subscribed to the given location
@@ -27,7 +28,6 @@ export async function POST(req) {
       // If the subscription exists but is unsubscribed, update it
       if (!existingSubscription.subscription) {
         existingSubscription.subscription = true;
-        existingSubscription.code = code; // Update the code, if applicable
         await existingSubscription.save();
 
         return new Response(
@@ -51,7 +51,6 @@ export async function POST(req) {
     const locationCustomer = await CustomerLocation.create({
       location_id: location_id,
       customer_id: customer._id,
-      code: code,
       subscription: true, // Ensure subscription is active
     });
 

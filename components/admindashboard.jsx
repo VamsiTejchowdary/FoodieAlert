@@ -206,6 +206,7 @@ export default function AdminDashboard() {
                     <p>Person Name: {location.businessPersonName}</p>
                     <p>Person Email: {location.businessEmail}</p>
                     <p>Business Address: {location.address}</p>
+                    <p>Message Channel: {location.messagechannel}</p>
                     <p>
                       Admin Status: <span className={`ml-2 font-bold ${location.adminstatus === "approved" ? "text-green-400" : "text-yellow-400"}`}>{location.adminstatus}</span>
                     </p>
@@ -232,6 +233,17 @@ export default function AdminDashboard() {
           )}
         </div>
       </div>
+      <footer
+        className="footer"
+        style={{
+          
+          padding: "30px",
+          textAlign: "center",
+          color: "#ddd",
+        }}
+      >
+        <p>&copy; 2025 FoodeAlert. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
