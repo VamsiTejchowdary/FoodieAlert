@@ -1,0 +1,15 @@
+Admins:
+
+1) Let admins send global push notifications to all users for announcements or updates.
+2) Number of notifications sent - For each user(Count)
+
+
+Users:
+1) Allow users to edit or delete locations they have already added.
+2) Analytics Dashboard:
+	•	Provide data on customer engagement, such as:
+	•	Number of subscribers per location.
+3) Customizable Notifications:
+	•	Enable users to include special offers, menus, or announcements in alerts.
+	•	Allow users to upload images or promotional banners to send with alerts.
+

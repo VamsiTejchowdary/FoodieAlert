@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function RegisterForm() {
   const [name, setName] = useState("");
@@ -15,8 +16,42 @@ export default function RegisterForm() {
   const [businessAddress, setBusinessAddress] = useState("");
   const [messageChannel, setMessageChannel] = useState("");
   const [error, setError] = useState("");
+  const [addressSuggestions, setAddressSuggestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
+  // Function to fetch location data from LocationIQ
+  const fetchLocationData = async (query) => {
+    if (!query) {
+      setAddressSuggestions([]); // Clear suggestions when input is empty
+      return;
+    }
+    const API_KEY = "pk.7e8c30e3d61b34a4bb1f66676cf244a7"; // Your API key
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${query}&format=json`
+      );
+
+      if (response.data && response.data.length > 0) {
+        setAddressSuggestions(response.data);
+        setError("");
+      } else {
+        setAddressSuggestions([]);
+        setError("No results found");
+      }
+    } catch (err) {
+      setAddressSuggestions([]);
+      setError("Error fetching data: " + err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddressSelect = (address) => {
+    setBusinessAddress(address.display_name);
+    setAddressSuggestions([]); // Clear suggestions after selecting an address
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,6 +82,7 @@ export default function RegisterForm() {
         toast.error("User already exists.");
         return;
       }
+
       const passcode = Math.floor(1000 + Math.random() * 9000);
       const res = await fetch("api/register", {
         method: "POST",
@@ -61,15 +97,16 @@ export default function RegisterForm() {
           passcode,
           businessName,
           businessAddress,
-          messageChannel, // Include message channel in the payload
+          messageChannel,
         }),
       });
 
       if (res.ok) {
         const form = e.target;
         form.reset();
+        setBusinessAddress(""); 
         toast.success("User registration Successful!", {
-          onClose: () => router.push("/login"), // Navigate after toast disappears
+          onClose: () => router.push("/login"),
         });
       } else {
         toast.error("User registration failed!");
@@ -81,12 +118,9 @@ export default function RegisterForm() {
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-r from-[#001f3d] to-[#243b4a]">
-      {/* Logo at the Top */}
       <div
         className="flex justify-center mt-1 mb-0"
-        style={{
-          marginTop: "-40px",
-        }}
+        style={{ marginTop: "-40px" }}
       >
         <img
           src="foodeehero.png"
@@ -95,12 +129,9 @@ export default function RegisterForm() {
         />
       </div>
 
-      {/* Form Section */}
       <div
         className="shadow-lg p-6 rounded-lg border-t-4 border-green-400 w-full max-w-lg mx-4"
-        style={{
-          background: "linear-gradient(to right, #001f3d, #374958)",
-        }}
+        style={{ background: "linear-gradient(to right, #001f3d, #374958)" }}
       >
         <h1
           className="text-2xl font-bold my-4 text-center"
@@ -139,13 +170,35 @@ export default function RegisterForm() {
             placeholder="Business Name"
             className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
           />
+
+          {/* Business Address with Autocomplete */}
           <input
-            onChange={(e) => setBusinessAddress(e.target.value)}
             type="text"
-            placeholder="Business Address"
+            value={businessAddress}
+            onChange={(e) => {
+              setBusinessAddress(e.target.value);
+              fetchLocationData(e.target.value);
+            }}
+            placeholder="Search for a business address"
             className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
           />
-          {/* Dropdown for Message Channel */}
+          {error && <div className="text-white">{error}</div>}
+
+          {/* Displaying Address Suggestions */}
+          {addressSuggestions.length > 0 && (
+            <div className="bg-white text-black max-h-48 overflow-auto rounded mt-2 p-2 w-full">
+              {addressSuggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleAddressSelect(suggestion)}
+                  className="cursor-pointer hover:bg-gray-200 p-2"
+                >
+                  {suggestion.display_name}
+                </div>
+              ))}
+            </div>
+          )}
+
           <select
             onChange={(e) => setMessageChannel(e.target.value)}
             value={messageChannel}
@@ -176,22 +229,12 @@ export default function RegisterForm() {
               {error}
             </div>
           )}
-
-          <Link
-            className="text-sm text-center font-medium text-[#ff6f61] hover:text-[#f56a50] transition-all"
-            href={"/login"}
-          >
-            Already have an account? <span className="underline">Login</span>
-          </Link>
         </form>
       </div>
+
       <footer
         className="footer"
-        style={{
-          padding: "30px",
-          textAlign: "center",
-          color: "#ddd",
-        }}
+        style={{ padding: "30px", textAlign: "center", color: "#ddd" }}
       >
         <p>&copy; 2025 FoodeAlert. All rights reserved.</p>
       </footer>
