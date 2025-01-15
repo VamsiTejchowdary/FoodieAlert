@@ -1,5 +1,6 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import Location from "@/models/locations";
+import CustomerLocation from "@/models/customerslocations";
 
 export async function GET(request) {
   try {
@@ -20,13 +21,27 @@ export async function GET(request) {
       );
     }
 
+    // Fetch locations based on business_id and active status
     const locations = await Location.find({
       business_id,
       activestatus: true,
     });
 
+    // For each location, fetch customer count where subscription is true
+    const locationsWithCustomerCount = await Promise.all(locations.map(async (location) => {
+      // Get customer count for the location where subscription is true
+      const customerCount = await CustomerLocation.countDocuments({
+        location_id: location._id,
+        subscription: true,
+      });
+
+      // Add customer count to the location object
+      return { ...location.toObject(), customerCount };
+    }));
+   // console.log(locations);
+
     return new Response(
-      JSON.stringify({ locations }), 
+      JSON.stringify({ locations: locationsWithCustomerCount }),
       {
         status: 200,
         headers: { "Content-Type": "application/json" },

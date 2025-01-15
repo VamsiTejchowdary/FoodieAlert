@@ -72,6 +72,7 @@ export default function UserInfo() {
         }
       );
       const data = await response.json();
+      console.log(data.locations);
       setLocations(data.locations || []);
     } catch (error) {
       toast.error("Error fetching locations.");
@@ -231,42 +232,45 @@ export default function UserInfo() {
             Locations
           </h2>
           {locations.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {locations.map((location, index) => (
-                <div
-                  key={index}
-                  className="relative bg-gradient-to-r from-[#001f3d] to-[#243b4a] p-6 rounded-lg shadow-lg space-y-4"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">
-                        {location.name}
-                      </h3>
-                      {location.adminstatus === "approved" && (
-                        <p className="text-sm text-gray-300">
-                          Users: {location.name}
-                        </p>
-                      )}
-                    </div>
-                    <span>
-                      {location.adminstatus === "approved" && (
-                        <FaCheckCircle className="text-green-500 text-lg" />
-                      )}
-                      {location.adminstatus === "pending" && (
-                        <FaHourglassHalf className="text-yellow-500 text-lg" />
-                      )}
-                      {location.adminstatus === "rejected" && (
-                        <FaTimesCircle className="text-red-500 text-lg" />
-                      )}
-                    </span>
-                  </div>
-                  <p className="text-gray-300">{location.address}</p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-600">No locations available.</p>
-          )}
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {locations.map((location, index) => (
+      <div
+        key={index}
+        className="relative bg-gradient-to-r from-[#001f3d] to-[#243b4a] p-6 rounded-lg shadow-lg flex flex-col justify-between space-y-4"
+      >
+        {/* Location Name and Status */}
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-white">{location.name}</h3>
+            <p className="text-sm text-gray-300">{location.address}</p>
+          </div>
+          <span>
+            {location.adminstatus === "approved" && (
+              <FaCheckCircle className="text-green-500 text-lg" />
+            )}
+            {location.adminstatus === "pending" && (
+              <FaHourglassHalf className="text-yellow-500 text-lg" />
+            )}
+            {location.adminstatus === "rejected" && (
+              <FaTimesCircle className="text-red-500 text-lg" />
+            )}
+          </span>
+        </div>
+
+        {/* Customer Count Display */}
+        <div className="flex flex-col items-center justify-center mt-6">
+          <div className="bg-[#ff7900] text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg">
+            <p className="text-xl font-bold">{location.customerCount}</p>
+          </div>
+          {/* Reduced opacity for 'Customers' */}
+          <p className="mt-2 text-sm text-white opacity-60">Customers</p>
+        </div>
+      </div>
+    ))}
+  </div>
+) : (
+  <p className="text-gray-600">No locations available.</p>
+)}
         </div>
       )}
       <footer
@@ -279,6 +283,7 @@ export default function UserInfo() {
       >
         <p>&copy; 2025 FoodeAlert. All rights reserved.</p>
       </footer>
+      {/* location Model */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-gradient-to-r from-[#001f3d] to-[#374958] p-8 rounded-lg shadow-lg w-full max-w-md relative">
@@ -355,117 +360,117 @@ export default function UserInfo() {
           </div>
         </div>
       )}
-
-{isAlertModalOpen && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div
-      className="bg-gradient-to-r from-[#001f3d] to-[#243b4a] p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-md relative max-h-screen overflow-y-auto"
-      style={{
-        margin: "auto",
-      }}
-    >
-      <button
-        onClick={() => setIsAlertModalOpen(false)}
-        className="absolute top-4 right-4 text-white hover:text-gray-400"
-        aria-label="Close"
-      >
-        <FaTimesCircle className="text-xl" />
-      </button>
-
-      <h2
-        className="text-center text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff6f61] to-[#f86e4f] mb-6"
-        style={{
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-        }}
-      >
-        Send Alert
-      </h2>
-
-      <div className="space-y-6">
-        <div>
-          <label
-            className="block text-lg font-medium text-white mb-2"
-            htmlFor="select-location"
+      {/* Send Nofication Model */}
+      {isAlertModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div
+            className="bg-gradient-to-r from-[#001f3d] to-[#243b4a] p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-md relative max-h-screen overflow-y-auto"
+            style={{
+              margin: "auto",
+            }}
           >
-            Select Location
-          </label>
-          <select
-            id="select-location"
-            value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
-            className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
-          >
-            <option value="">Select Location</option>
-            {locations
-              .filter((loc) => loc.adminstatus === "approved")
-              .map((location) => (
-                <option key={location._id} value={location._id}>
-                  {location.name} - {location.address}
-                </option>
-              ))}
-          </select>
+            <button
+              onClick={() => setIsAlertModalOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-gray-400"
+              aria-label="Close"
+            >
+              <FaTimesCircle className="text-xl" />
+            </button>
+
+            <h2
+              className="text-center text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff6f61] to-[#f86e4f] mb-6"
+              style={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Send Alert
+            </h2>
+
+            <div className="space-y-6">
+              <div>
+                <label
+                  className="block text-lg font-medium text-white mb-2"
+                  htmlFor="select-location"
+                >
+                  Select Location
+                </label>
+                <select
+                  id="select-location"
+                  value={selectedLocation}
+                  onChange={(e) => setSelectedLocation(e.target.value)}
+                  className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+                >
+                  <option value="">Select Location</option>
+                  {locations
+                    .filter((loc) => loc.adminstatus === "approved")
+                    .map((location) => (
+                      <option key={location._id} value={location._id}>
+                        {location.name} - {location.address}
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              <div>
+                <label
+                  className="block text-lg font-medium text-white mb-2"
+                  htmlFor="compose-message"
+                >
+                  Compose Message
+                </label>
+                <textarea
+                  id="compose-message"
+                  value={alertMessage}
+                  onChange={(e) => setAlertMessage(e.target.value)}
+                  className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+                  rows="4"
+                  placeholder="Enter your alert message"
+                />
+              </div>
+
+              <div>
+                <label
+                  className="block text-lg font-medium text-white mb-2"
+                  htmlFor="in-time"
+                >
+                  In Time
+                </label>
+                <input
+                  id="in-time"
+                  type="datetime-local"
+                  value={inTime}
+                  onChange={(e) => setInTime(e.target.value)}
+                  className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+                />
+              </div>
+
+              <div>
+                <label
+                  className="block text-lg font-medium text-white mb-2"
+                  htmlFor="out-time"
+                >
+                  Out Time
+                </label>
+                <input
+                  id="out-time"
+                  type="datetime-local"
+                  value={outTime}
+                  onChange={(e) => setOutTime(e.target.value)}
+                  className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+                />
+              </div>
+
+              <button
+                onClick={handleSendAlert}
+                className="w-full bg-gradient-to-r from-[#ff6f61] to-[#f86e4f] text-white py-3 rounded-lg font-semibold hover:from-[#f56a50] hover:to-[#e95b40] transition-all focus:outline-none focus:ring-4 focus:ring-[#ff6f61]"
+              >
+                Send Alert
+              </button>
+            </div>
+          </div>
         </div>
-
-        <div>
-          <label
-            className="block text-lg font-medium text-white mb-2"
-            htmlFor="compose-message"
-          >
-            Compose Message
-          </label>
-          <textarea
-            id="compose-message"
-            value={alertMessage}
-            onChange={(e) => setAlertMessage(e.target.value)}
-            className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
-            rows="4"
-            placeholder="Enter your alert message"
-          />
-        </div>
-
-        <div>
-          <label
-            className="block text-lg font-medium text-white mb-2"
-            htmlFor="in-time"
-          >
-            In Time
-          </label>
-          <input
-            id="in-time"
-            type="datetime-local"
-            value={inTime}
-            onChange={(e) => setInTime(e.target.value)}
-            className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
-          />
-        </div>
-
-        <div>
-          <label
-            className="block text-lg font-medium text-white mb-2"
-            htmlFor="out-time"
-          >
-            Out Time
-          </label>
-          <input
-            id="out-time"
-            type="datetime-local"
-            value={outTime}
-            onChange={(e) => setOutTime(e.target.value)}
-            className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
-          />
-        </div>
-
-        <button
-          onClick={handleSendAlert}
-          className="w-full bg-gradient-to-r from-[#ff6f61] to-[#f86e4f] text-white py-3 rounded-lg font-semibold hover:from-[#f56a50] hover:to-[#e95b40] transition-all focus:outline-none focus:ring-4 focus:ring-[#ff6f61]"
-        >
-          Send Alert
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 }
