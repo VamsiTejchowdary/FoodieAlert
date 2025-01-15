@@ -18,6 +18,7 @@ export default function RegisterForm() {
   const [error, setError] = useState("");
   const [addressSuggestions, setAddressSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [locationError, setLocationError] = useState("");
 
   const router = useRouter();
   // Function to fetch location data from LocationIQ
@@ -35,14 +36,14 @@ export default function RegisterForm() {
 
       if (response.data && response.data.length > 0) {
         setAddressSuggestions(response.data);
-        setError("");
+        setLocationError("");
       } else {
         setAddressSuggestions([]);
-        setError("No results found");
+        setLocationError("No results found");
       }
     } catch (err) {
       setAddressSuggestions([]);
-      setError("Error fetching data: " + err.message);
+      setLocationError("Error fetching data please type whole address");
     } finally {
       setIsLoading(false);
     }
@@ -182,7 +183,7 @@ export default function RegisterForm() {
             placeholder="Search for a business address"
             className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
           />
-          {error && <div className="text-white">{error}</div>}
+          {locationError && <div className="text-white">{locationError}</div>}
 
           {/* Displaying Address Suggestions */}
           {addressSuggestions.length > 0 && (
