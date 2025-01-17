@@ -11,6 +11,7 @@ import {
   FaBell,
 } from "react-icons/fa"; // Added Bell Icon
 import { useRouter } from "next/navigation";
+import { sendAlertEmailToCustomer } from "../emails/user/sendalertemailtocustomers";
 
 export default function UserInfo() {
   const { data: session, status } = useSession();
@@ -72,7 +73,7 @@ export default function UserInfo() {
         }
       );
       const data = await response.json();
-      console.log(data.locations);
+      //console.log(data.locations);
       setLocations(data.locations || []);
     } catch (error) {
       toast.error("Error fetching locations.");
@@ -124,9 +125,48 @@ export default function UserInfo() {
     });
   };
 
-  const handleSendAlert = () => {
-    toast.success("Alert sent successfully!");
-    setIsAlertModalOpen(false);
+  const handleSendAlert = async () => {
+    if (
+      !selectedLocation ||
+      !inTime ||
+      !outTime
+    ) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
+    try {
+     // console.log(selectedLocation, alertMessage, inTime, outTime, user._id);
+      const res = await fetch("api/userdashboard/sendalert", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          location_id: selectedLocation,
+          business_id: user._id,
+          message: alertMessage || "",
+          in_time: inTime,
+          out_time: outTime,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        await sendAlertEmailToCustomer(selectedLocation, inTime, outTime, alertMessage);
+        toast.success("Alert sent successfully!");
+        setSelectedLocation('');
+        setAlertMessage('');
+        setInTime('');
+        setOutTime('');
+      } else {
+        toast.error(data.message || "Failed to send alert.");
+      }
+    } catch (error) {
+      console.error("Error sending alert:", error);
+      toast.error("Failed to send alert. Please try again.");
+    }
   };
 
   if (status === "loading") {
@@ -197,7 +237,7 @@ export default function UserInfo() {
             {/* Add Location Button */}
             <button
               onClick={() => setIsModalOpen(true)}
-              className="px-6 py-3 rounded-lg text-white font-semibold bg-[#ff7900] hover:bg-[#22005c] transition-all transform hover:scale-105 focus:outline-none"
+              className="px-6 py-3 rounded-lg text-white font-semibold bg-[#ff7900] hover:bg-[#ff7900] transition-all transform hover:scale-105 focus:outline-none"
             >
               Add Location
             </button>
@@ -232,45 +272,53 @@ export default function UserInfo() {
             Locations
           </h2>
           {locations.length > 0 ? (
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    {locations.map((location, index) => (
-      <div
-        key={index}
-        className="relative bg-gradient-to-r from-[#001f3d] to-[#243b4a] p-6 rounded-lg shadow-lg flex flex-col justify-between space-y-4"
-      >
-        {/* Location Name and Status */}
-        <div className="flex items-start justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-white">{location.name}</h3>
-            <p className="text-sm text-gray-300">{location.address}</p>
-          </div>
-          <span>
-            {location.adminstatus === "approved" && (
-              <FaCheckCircle className="text-green-500 text-lg" />
-            )}
-            {location.adminstatus === "pending" && (
-              <FaHourglassHalf className="text-yellow-500 text-lg" />
-            )}
-            {location.adminstatus === "rejected" && (
-              <FaTimesCircle className="text-red-500 text-lg" />
-            )}
-          </span>
-        </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {locations.map((location, index) => (
+                <div
+                  key={index}
+                  className="relative bg-gradient-to-r from-[#001f3d] to-[#243b4a] p-6 rounded-lg shadow-lg flex flex-col justify-between space-y-4"
+                >
+                  {/* Location Name and Status */}
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold text-white">
+                        {location.name}
+                      </h3>
+                      <p className="text-sm text-gray-300">
+                        {location.address}
+                      </p>
+                    </div>
+                    <span>
+                      {location.adminstatus === "approved" && (
+                        <FaCheckCircle className="text-green-500 text-lg" />
+                      )}
+                      {location.adminstatus === "pending" && (
+                        <FaHourglassHalf className="text-yellow-500 text-lg" />
+                      )}
+                      {location.adminstatus === "rejected" && (
+                        <FaTimesCircle className="text-red-500 text-lg" />
+                      )}
+                    </span>
+                  </div>
 
-        {/* Customer Count Display */}
-        <div className="flex flex-col items-center justify-center mt-6">
-          <div className="bg-[#ff7900] text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg">
-            <p className="text-xl font-bold">{location.customerCount}</p>
-          </div>
-          {/* Reduced opacity for 'Customers' */}
-          <p className="mt-2 text-sm text-white opacity-60">Customers</p>
-        </div>
-      </div>
-    ))}
-  </div>
-) : (
-  <p className="text-gray-600">No locations available.</p>
-)}
+                  {/* Customer Count Display */}
+                  <div className="flex flex-col items-center justify-center mt-6">
+                    <div className="bg-[#ff7900] text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg">
+                      <p className="text-xl font-bold">
+                        {location.customerCount}
+                      </p>
+                    </div>
+                    {/* Reduced opacity for 'Customers' */}
+                    <p className="mt-2 text-sm text-white opacity-60">
+                      Customers
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-600">No locations available.</p>
+          )}
         </div>
       )}
       <footer
@@ -283,7 +331,7 @@ export default function UserInfo() {
       >
         <p>&copy; 2025 FoodeAlert. All rights reserved.</p>
       </footer>
-      {/* location Model */}
+      {/* Add location Model */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-gradient-to-r from-[#001f3d] to-[#374958] p-8 rounded-lg shadow-lg w-full max-w-md relative">
@@ -400,10 +448,11 @@ export default function UserInfo() {
                   value={selectedLocation}
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+                  required
                 >
                   <option value="">Select Location</option>
                   {locations
-                    .filter((loc) => loc.adminstatus === "approved")
+                    .filter((loc) => loc.adminstatus === "approved" && loc.customerCount > 0) 
                     .map((location) => (
                       <option key={location._id} value={location._id}>
                         {location.name} - {location.address}
@@ -442,6 +491,7 @@ export default function UserInfo() {
                   value={inTime}
                   onChange={(e) => setInTime(e.target.value)}
                   className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+                  required
                 />
               </div>
 
@@ -458,12 +508,14 @@ export default function UserInfo() {
                   value={outTime}
                   onChange={(e) => setOutTime(e.target.value)}
                   className="p-4 rounded border-none bg-[#243b4a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6f61] w-full"
+                  required
                 />
               </div>
 
               <button
                 onClick={handleSendAlert}
                 className="w-full bg-gradient-to-r from-[#ff6f61] to-[#f86e4f] text-white py-3 rounded-lg font-semibold hover:from-[#f56a50] hover:to-[#e95b40] transition-all focus:outline-none focus:ring-4 focus:ring-[#ff6f61]"
+                type="submit"
               >
                 Send Alert
               </button>

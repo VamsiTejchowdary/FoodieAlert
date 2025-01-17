@@ -164,12 +164,12 @@ export default function AdminDashboard() {
             <div className="grid gap-6 grid-cols-1 w-full md:grid-cols-2 lg:grid-cols-3">
               {users.length > 0 ? (
                 users.map((user) => (
-                  <div key={user._id} className="bg-[#243b4a] rounded-lg shadow-lg p-4 flex flex-col items-start border-t-4" style={{ borderColor: user.status === "approved" ? "green" : "yellow" }}>
+                  <div key={user._id} className="bg-[#243b4a] rounded-lg shadow-lg p-4 flex flex-col items-start border-t-4" style={{ borderColor: user.status === "approved" ? "green" : "red" }}>
                     <h3 className="text-lg font-bold">{user.name}</h3>
                     <p>Email: {user.email}</p>
                     <p>Number: {user.number}</p>
                     <p>
-                      Status: <span className={`ml-2 font-bold ${user.status === "approved" ? "text-green-400" : "text-yellow-400"}`}>{user.status}</span>
+                      Status: <span className={`ml-2 font-bold ${user.status === "approved" ? "text-green-400" : "text-red-400"}`}>{user.status}</span>
                     </p>
                     <div className="mt-4 flex gap-2 w-full">
                       {user.status === "pending" && (
@@ -200,7 +200,7 @@ export default function AdminDashboard() {
                   <div
                     key={location._id}
                     className="bg-[#243b4a] rounded-lg shadow-lg p-4 flex flex-col items-start border-t-4"
-                    style={{ borderColor: location.adminstatus === "approved" ? "green" : "yellow" }}
+                    style={{ borderColor: location.adminstatus === "approved" ? "green" : "red" }}
                   >
                     <h3 className="text-lg font-bold">{location.name}</h3>
                     <p>Person Name: {location.businessPersonName}</p>
@@ -208,7 +208,7 @@ export default function AdminDashboard() {
                     <p>Business Address: {location.address}</p>
                     <p>Message Channel: {location.messagechannel}</p>
                     <p>
-                      Admin Status: <span className={`ml-2 font-bold ${location.adminstatus === "approved" ? "text-green-400" : "text-yellow-400"}`}>{location.adminstatus}</span>
+                      Admin Status: <span className={`ml-2 font-bold ${location.adminstatus === "approved" ? "text-green-400" : "text-red-400"}`}>{location.adminstatus}</span>
                     </p>
                     <div className="mt-4 flex gap-2 w-full">
                       {location.adminstatus === "pending" && (
