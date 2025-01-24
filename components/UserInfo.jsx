@@ -156,7 +156,7 @@ export default function UserInfo() {
 
 
       if (res.ok) {
-       // await sendAlertEmailToCustomer(selectedLocation, inTime, outTime, alertMessage);
+        await sendAlertEmailToCustomer(selectedLocation, inTime, outTime, alertMessage);
         await sendAlertSmsToCustomer(selectedLocation, inTime, outTime, alertMessage);
   
         toast.success("Alert sent successfully!");
