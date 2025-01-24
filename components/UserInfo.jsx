@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa"; // Added Bell Icon
 import { useRouter } from "next/navigation";
 import { sendAlertEmailToCustomer } from "../emails/user/sendalertemailtocustomers";
+import { sendAlertSmsToCustomer } from "../emails/user/sendalerttocustomers";
 
 export default function UserInfo() {
   const { data: session, status } = useSession();
@@ -153,8 +154,11 @@ export default function UserInfo() {
 
       const data = await res.json();
 
+
       if (res.ok) {
-        await sendAlertEmailToCustomer(selectedLocation, inTime, outTime, alertMessage);
+       // await sendAlertEmailToCustomer(selectedLocation, inTime, outTime, alertMessage);
+        await sendAlertSmsToCustomer(selectedLocation, inTime, outTime, alertMessage);
+  
         toast.success("Alert sent successfully!");
         setSelectedLocation('');
         setAlertMessage('');

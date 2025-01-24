@@ -64,6 +64,28 @@ const CustomerForm = () => {
         const customer = responseData.customer; // Access the customer object
         const customerCode = customer.code; 
         console.log("selectedLocationDetails: ", locationDetails);
+
+        const smsResponse = await fetch("/api/SMS/customersubscription", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: phone,
+            locationName: locationDetails.name,
+            locationAddress: locationDetails.address,
+          }),
+        });
+  
+        const smsData = await smsResponse.json();
+  
+        if (smsData.message === "SMS sent successfully") {
+          console.log("SMS sent successfully");
+        } else {
+          console.error("Failed to send SMS:", smsData);
+        }
+        
+  
         await sendEmail(formData.email, formData.name, customerCode, locationDetails.name, locationDetails.address);
 
         setSuccessMessage("Thank you for subscribing!");

@@ -25,14 +25,15 @@ export async function POST(req) {
       // Find the customers by customer_ids
       const customers = await Customer.find({
         _id: { $in: customerIds }, // Match customer_ids
-      }).select("email"); // Only select the email field
+      }).select("email phone");  // Only select the email field
 
       // Extract emails from the customers
       const customerEmails = customers.map((customer) => customer.email);
+      const phone = customers.map((customer) => customer.phone);
 
       //console.log("Customer Emails:", customerEmails);
 
-      return NextResponse.json({ emails: customerEmails });
+      return NextResponse.json({ emails: customerEmails, phones: phone }, { status: 200 });
     } else {
       return NextResponse.json({ message: "No subscribed customers found for this location" }, { status: 404 });
     }
