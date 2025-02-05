@@ -11,29 +11,19 @@ export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");  // Reset error on each form submit
 
     try {
+      // Sign in with credentials
       const res = await signIn("credentials", {
         email,
         password,
-        redirect: false,
+        redirect: false, // Prevent automatic redirect
       });
-
-      const resUserExists = await fetch("api/userExists", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await resUserExists.json();
-      const user = data.user; // user is an object
 
       if (res.error) {
         toast.error("Invalid Credentials");
@@ -43,14 +33,32 @@ export default function LoginForm() {
 
       toast.success("Logged in successfully");
 
-      // Redirect based on user role
-      if (user.role === "admin") {
-        router.push("/admindashboard");
+      // Now, check user existence and fetch user details
+      const resUserExists = await fetch("/api/userExists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await resUserExists.json();
+      const user = data.user;
+
+      // Check if user is found and proceed with redirection
+      if (user) {
+        // Redirect based on user role
+        if (user.role === "admin") {
+          router.push("/admindashboard");
+        } else {
+          router.push("/dashboard");
+        }
       } else {
-        router.push("/dashboard");
+        toast.error("User does not exist");
       }
     } catch (error) {
       console.error("Error logging in:", error);
+      toast.error("An error occurred. Please try again.");
     }
   };
 
@@ -137,6 +145,5 @@ export default function LoginForm() {
         </form>
       </div>
     </div>
-    
   );
 }
