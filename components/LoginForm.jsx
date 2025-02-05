@@ -45,9 +45,9 @@ export default function LoginForm() {
 
       // Redirect based on user role
       if (user.role === "admin") {
-        router.replace("/admindashboard");
+        router.push("/admindashboard");
       } else {
-        router.replace("/dashboard");
+        router.push("/dashboard");
       }
     } catch (error) {
       console.error("Error logging in:", error);
